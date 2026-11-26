@@ -229,12 +229,10 @@
   /* About */
   .about { display: flex; gap: 14px; align-items: flex-start; }
   .avatar {
-    flex: 0 0 auto; width: 56px; height: 56px; border-radius: 50%;
-    display: grid; place-items: center;
-    background: var(--surface-2); color: var(--accent-ink);
-    font-family: "Noto Serif TC", serif; font-size: 22px; font-weight: 700;
-    border: 1px solid var(--line);
+    display: block; flex: 0 0 auto; width: 64px; height: 64px; border-radius: 50%;
+    object-fit: cover; border: 2px solid var(--accent);
   }
+  .iglink { display: inline-block; margin-top: 8px; font-size: 14px; font-weight: 700; color: var(--accent-ink); text-decoration: none; }
   .about p { margin: 0; font-size: 15px; }
   .about .name { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
 
@@ -306,10 +304,11 @@
 
   <section class="card">
     <div class="about">
-      <div class="avatar" aria-hidden="true">數</div>
+      <a href="https://www.instagram.com/shulibook/" target="_blank" rel="noopener"><img class="avatar" src="avatar.jpg" alt="惠姐的大頭照" width="64" height="64"></a>
       <div>
         <p class="name" id="brandName"></p>
-        <p>做了 30 幾年業務主管，為老闆的前途拼了大半輩子，離職那一刻才發現一切歸零。現在用生命靈數幫職場人看懂天賦、抓準時機，<b>不要再把人生交給別人。</b></p>
+        <p>30 年資深業務主管，每月達標千萬業績，已協助 100+ 學員找到人生下一步。為老闆拼了大半輩子，離職那一刻才發現一切歸零，現在用數字幫職場人看懂自己、抓準時機，<b>不要再把人生交給別人。</b></p>
+        <a class="iglink" href="https://www.instagram.com/shulibook/" target="_blank" rel="noopener">追蹤我的 IG @shulibook →</a>
       </div>
     </div>
   </section>
@@ -322,8 +321,8 @@
 <script>
 /* ====== 這裡改成你自己的資料 ====== */
 const CONFIG = {
-  igHandle: "your_ig_id",          // 你的 IG 帳號（不含 @）
-  brandName: "懂職場的靈數老師",     // 你的品牌名稱
+  igHandle: "shulibook",           // 你的 IG 帳號（不含 @）
+  brandName: "惠姐｜職場成長與數字基因密碼",// 你的品牌名稱
   defaultYear: 2027                 // 預設顯示哪一年的流年
 };
 /* ================================== */
@@ -409,7 +408,7 @@ $("form").addEventListener("submit", (e) => {
 
 /* 品牌與按鈕 */
 $("brandName").textContent = CONFIG.brandName;
-$("brandFoot").textContent = CONFIG.brandName;
+$("brandFoot").textContent = "惠姐 @" + CONFIG.igHandle;
 $("yr").textContent = nowY;
 $("ctaLink").href = "https://ig.me/m/" + encodeURIComponent(CONFIG.igHandle);
 
