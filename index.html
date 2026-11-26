@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>生命靈數職場解讀</title>
-<meta name="description" content="輸入生日，免費算出你的生命靈數與 2027 流年，看懂你的職場天賦與今年該衝還是該蹲。">
-<meta property="og:title" content="算算你的生命靈數｜職場天賦 × 2027 流年">
-<meta property="og:description" content="30 年業務主管 × 生命靈數諮詢師，幫你看懂自己，不再替別人過一生。">
+<title>數字基因密碼職場解讀</title>
+<meta name="description" content="輸入生日，免費算出你的數字基因密碼與 2027 流年，看懂你的職場天賦與今年該衝還是該蹲。">
+<meta property="og:title" content="算算你的數字基因密碼｜職場天賦 × 2027 流年">
+<meta property="og:description" content="30 年業務主管 × 數字基因密碼諮詢師，幫你看懂自己，不再替別人過一生。">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#3b2f63">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%233b2f63'/%3E%3Ctext x='32' y='43' font-size='32' text-anchor='middle' fill='%23e0b467' font-family='serif'%3E8%3C/text%3E%3C/svg%3E">
@@ -250,9 +250,9 @@
 <body>
 
 <header class="hero">
-  <span class="tag">生命靈數 × 職場</span>
+  <span class="tag">數字基因密碼 × 職場</span>
   <h1>你的生日裡，<br>藏著你的<em>職場天賦</em></h1>
-  <p>輸入生日，30 秒算出你的生命靈數與流年。<br>看懂自己適合什麼、今年該衝還是該蹲。</p>
+  <p>輸入生日，30 秒算出你的數字基因密碼與流年。<br>看懂自己適合什麼、今年該衝還是該蹲。</p>
 </header>
 
 <main class="wrap">
@@ -282,7 +282,7 @@
       <div class="pair">
         <div class="pitem">
           <div class="badge" id="lpBadge">?</div>
-          <div class="plabel">生命靈數</div>
+          <div class="plabel">數字基因密碼</div>
         </div>
         <div class="pitem">
           <div class="badge gold" id="pyBadge">?</div>
@@ -391,9 +391,9 @@ function render() {
   $("lpBadge").textContent = lp.n;
   $("pyBadge").textContent = py.n;
   $("pyLabel").textContent = pickYear + " 流年";
-  $("lpCalc").textContent = "生命靈數：" + lp.text;
+  $("lpCalc").textContent = "數字基因密碼：" + lp.text;
   $("pyCalc").textContent = pickYear + " 流年（月＋日＋" + pickYear + "）：" + py.text;
-  $("ctaText").textContent = "生命靈數 " + lp.n + " × 流年 " + py.n + "，對你的職場代表什麼？該衝還是該蹲？私訊我「流年」，我幫你一對一解讀。";
+  $("ctaText").textContent = "數字基因密碼 " + lp.n + " × 流年 " + py.n + "，對你的職場代表什麼？該衝還是該蹲？私訊我「流年」，我幫你一對一解讀。";
   return true;
 }
 
@@ -417,7 +417,7 @@ function toast(msg) {
   setTimeout(() => t.classList.remove("show"), 1800);
 }
 $("shareBtn").addEventListener("click", async () => {
-  const data = { title: "算算你的生命靈數", text: "我剛算了我的生命靈數和流年，超準！你也來算算看 👉", url: location.href };
+  const data = { title: "算算你的數字基因密碼", text: "我剛算了我的數字基因密碼和流年，超準！你也來算算看 👉", url: location.href };
   try {
     if (navigator.share) { await navigator.share(data); return; }
   } catch (e) { if (e && e.name === "AbortError") return; }
