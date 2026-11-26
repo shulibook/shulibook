@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>生命靈數職場解讀</title>
+<meta name="description" content="輸入生日，免費算出你的生命靈數與 2027 流年，看懂你的職場天賦與今年該衝還是該蹲。">
+<meta property="og:title" content="算算你的生命靈數｜職場天賦 × 2027 流年">
+<meta property="og:description" content="30 年業務主管 × 生命靈數諮詢師，幫你看懂自己，不再替別人過一生。">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#3b2f63">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%233b2f63'/%3E%3Ctext x='32' y='43' font-size='32' text-anchor='middle' fill='%23e0b467' font-family='serif'%3E8%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf6ef;
+    --surface: #ffffff;
+    --surface-2: #f3ede2;
+    --ink: #2a2340;
+    --muted: #6b6480;
+    --deep: #3b2f63;
+    --on-deep: #ffffff;
+    --accent: #b8873b;
+    --accent-ink: #8a6020;
+    --line: #e6ddcd;
+    --good: #2f7a5a;
+    --warn: #b0522f;
+    --shadow: 0 10px 30px rgba(59, 47, 99, .10);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15121d;
+      --surface: #201b2c;
+      --surface-2: #2a2439;
+      --ink: #f1ecf8;
+      --muted: #aaa2bf;
+      --deep: #4a3d7a;
+      --on-deep: #ffffff;
+      --accent: #e0b467;
+      --accent-ink: #e8c27f;
+      --line: #362f47;
+      --good: #6fcf9f;
+      --warn: #f08f6a;
+      --shadow: 0 10px 30px rgba(0, 0, 0, .35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15121d;
+    --surface: #201b2c;
+    --surface-2: #2a2439;
+    --ink: #f1ecf8;
+    --muted: #aaa2bf;
+    --deep: #4a3d7a;
+    --on-deep: #ffffff;
+    --accent: #e0b467;
+    --accent-ink: #e8c27f;
+    --line: #362f47;
+    --good: #6fcf9f;
+    --warn: #f08f6a;
+    --shadow: 0 10px 30px rgba(0, 0, 0, .35);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+  }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 0 16px 48px; }
+  h1, h2, h3, .serif { font-family: "Noto Serif TC", "PMingLiU", serif; }
+
+  /* Hero */
+  .hero {
+    background: radial-gradient(120% 90% at 50% 0%, #5a4a92 0%, var(--deep) 60%);
+    color: var(--on-deep);
+    padding: 44px 16px 72px;
+    text-align: center;
+  }
+  .hero .tag {
+    display: inline-block;
+    font-size: 13px;
+    letter-spacing: .12em;
+    color: #f0d49e;
+    border: 1px solid rgba(240, 212, 158, .45);
+    border-radius: 999px;
+    padding: 2px 14px;
+    margin-bottom: 14px;
+  }
+  .hero h1 { font-size: 30px; line-height: 1.35; margin: 0 0 10px; }
+  .hero h1 em { font-style: normal; color: #f0d49e; }
+  .hero p { margin: 0 auto; max-width: 30em; opacity: .9; font-size: 15px; }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    padding: 22px 18px;
+    margin-top: 18px;
+  }
+  .card.lift { margin-top: -48px; position: relative; }
+  .card h2 { font-size: 20px; margin: 0 0 4px; }
+  .card .sub { color: var(--muted); font-size: 14px; margin: 0 0 16px; }
+
+  /* Form */
+  .row { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 10px; }
+  label.field { display: block; font-size: 13px; color: var(--muted); }
+  select {
+    width: 100%;
+    margin-top: 4px;
+    font: inherit;
+    font-size: 17px;
+    color: var(--ink);
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 10px 10px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+    background-position: calc(100% - 16px) 52%, calc(100% - 11px) 52%;
+    background-size: 5px 5px;
+    background-repeat: no-repeat;
+  }
+  select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .year-pick { margin-top: 14px; }
+  .chips { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+  .chip {
+    font: inherit; font-size: 15px;
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 6px 16px;
+    cursor: pointer;
+  }
+  .chip[aria-pressed="true"] { background: var(--deep); color: var(--on-deep); border-color: var(--deep); }
+  .btn {
+    display: block; width: 100%;
+    margin-top: 20px;
+    font: inherit; font-size: 17px; font-weight: 700;
+    letter-spacing: .08em;
+    color: #2a1e05;
+    background: linear-gradient(180deg, #ebc47c, #c9953f);
+    border: 0; border-radius: 14px;
+    padding: 14px;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(184, 135, 59, .35);
+  }
+  .btn:active { transform: translateY(1px); }
+  .err { color: var(--warn); font-size: 14px; margin: 10px 0 0; min-height: 0; }
+
+  /* Results */
+  #results { display: none; }
+  #results.show { display: block; animation: rise .5s ease both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  .num-head { display: flex; align-items: center; gap: 16px; }
+  .badge {
+    flex: 0 0 auto;
+    width: 76px; height: 76px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-family: "Noto Serif TC", serif;
+    font-size: 40px; font-weight: 700;
+    color: var(--on-deep);
+    background: radial-gradient(circle at 35% 30%, #6a59a8, var(--deep));
+    box-shadow: inset 0 0 0 3px rgba(240, 212, 158, .7);
+  }
+  .badge.gold { background: radial-gradient(circle at 35% 30%, #efcd8c, #b8873b); color: #2a1e05; box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .6); }
+  .kicker { font-size: 13px; color: var(--accent-ink); letter-spacing: .1em; font-weight: 700; }
+  .num-head h3 { font-size: 22px; margin: 0; line-height: 1.4; }
+  .calc {
+    margin: 14px 0 0;
+    font-size: 13px; color: var(--muted);
+    background: var(--surface-2);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-variant-numeric: tabular-nums;
+    word-break: break-all;
+  }
+  .lead { margin: 14px 0 0; font-size: 16px; }
+  .kv { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+  .kv li { display: grid; grid-template-columns: 4.6em 1fr; gap: 10px; align-items: start; }
+  .kv .k {
+    font-size: 13px; font-weight: 700; text-align: center;
+    border-radius: 8px; padding: 2px 0;
+    background: var(--surface-2); color: var(--ink);
+  }
+  .kv .k.good { color: var(--good); }
+  .kv .k.warn { color: var(--warn); }
+  .quote {
+    margin: 16px 0 0;
+    padding: 12px 14px;
+    border-left: 3px solid var(--accent);
+    background: var(--surface-2);
+    border-radius: 0 10px 10px 0;
+    font-size: 15px;
+  }
+  .quote b { color: var(--accent-ink); }
+  .note { font-size: 13px; color: var(--muted); margin: 12px 0 0; }
+
+  /* CTA */
+  .cta { background: var(--deep); color: var(--on-deep); border-color: transparent; text-align: center; }
+  .cta h2 { color: #f0d49e; }
+  .cta p { margin: 8px 0 0; opacity: .92; font-size: 15px; }
+  .cta .btn { margin-top: 18px; text-decoration: none; }
+  .cta .ghost {
+    display: block; width: 100%;
+    margin-top: 10px;
+    font: inherit; font-size: 15px;
+    color: var(--on-deep);
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, .4);
+    border-radius: 14px;
+    padding: 11px;
+    cursor: pointer;
+  }
+
+  /* About */
+  .about { display: flex; gap: 14px; align-items: flex-start; }
+  .avatar {
+    flex: 0 0 auto; width: 56px; height: 56px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--surface-2); color: var(--accent-ink);
+    font-family: "Noto Serif TC", serif; font-size: 22px; font-weight: 700;
+    border: 1px solid var(--line);
+  }
+  .about p { margin: 0; font-size: 15px; }
+  .about .name { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
+
+  footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 28px; }
+  .toast {
+    position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+    background: var(--ink); color: var(--bg);
+    padding: 8px 16px; border-radius: 999px; font-size: 14px;
+    opacity: 0; pointer-events: none; transition: opacity .25s;
+  }
+  .toast.show { opacity: 1; }
+  @media (min-width: 600px) { .hero h1 { font-size: 36px; } }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <span class="tag">生命靈數 × 職場</span>
+  <h1>你的生日裡，<br>藏著你的<em>職場天賦</em></h1>
+  <p>輸入生日，30 秒算出你的生命靈數與流年。<br>看懂自己適合什麼、今年該衝還是該蹲。</p>
+</header>
+
+<main class="wrap">
+
+  <section class="card lift" aria-labelledby="form-title">
+    <h2 id="form-title">輸入你的國曆生日</h2>
+    <p class="sub">資料只在你的手機上計算，不會被儲存或傳送。</p>
+    <form id="form" novalidate>
+      <div class="row">
+        <label class="field">年<select id="y" required></select></label>
+        <label class="field">月<select id="m" required></select></label>
+        <label class="field">日<select id="d" required></select></label>
+      </div>
+      <div class="year-pick">
+        <span class="field" style="font-size:13px;color:var(--muted)">想看哪一年的流年？</span>
+        <div class="chips" id="chips" role="group" aria-label="選擇流年年份"></div>
+      </div>
+      <p class="err" id="err" role="alert"></p>
+      <button class="btn" type="submit">✦ 開始解讀</button>
+    </form>
+  </section>
+
+  <div id="results" aria-live="polite">
+
+    <section class="card">
+      <div class="num-head">
+        <div class="badge" id="lpBadge">?</div>
+        <div>
+          <div class="kicker">你的生命靈數｜天生職場角色</div>
+          <h3 id="lpTitle"></h3>
+        </div>
+      </div>
+      <p class="calc" id="lpCalc"></p>
+      <p class="lead" id="lpLead"></p>
+      <ul class="kv">
+        <li><span class="k good">天賦</span><span id="lpGift"></span></li>
+        <li><span class="k">適合</span><span id="lpFit"></span></li>
+        <li><span class="k warn">盲點</span><span id="lpBlind"></span></li>
+      </ul>
+      <p class="quote" id="lpTip"></p>
+    </section>
+
+    <section class="card">
+      <div class="num-head">
+        <div class="badge gold" id="pyBadge">?</div>
+        <div>
+          <div class="kicker" id="pyKicker">流年</div>
+          <h3 id="pyTitle"></h3>
+        </div>
+      </div>
+      <p class="calc" id="pyCalc"></p>
+      <p class="lead" id="pyLead"></p>
+      <ul class="kv">
+        <li><span class="k good">適合</span><span id="pyDo"></span></li>
+        <li><span class="k warn">注意</span><span id="pyDont"></span></li>
+      </ul>
+      <p class="quote" id="pyTip"></p>
+      <p class="note" id="pyUniversal"></p>
+    </section>
+
+    <section class="card cta">
+      <h2>想知道更完整的你？</h2>
+      <p>數字只是開始。一對一諮詢，我會結合你的生命靈數、流年和你現在的職場處境，幫你找出下一步該怎麼走。</p>
+      <a class="btn" id="ctaLink" href="#" target="_blank" rel="noopener">私訊我「流年」預約諮詢</a>
+      <button class="ghost" type="button" id="shareBtn">分享給同事朋友</button>
+    </section>
+
+  </div>
+
+  <section class="card">
+    <div class="about">
+      <div class="avatar" aria-hidden="true">數</div>
+      <div>
+        <p class="name" id="brandName"></p>
+        <p>做了 30 幾年業務主管，為老闆的前途拼了大半輩子，離職那一刻才發現一切歸零。現在用生命靈數幫職場人看懂天賦、抓準時機，<b>不要再把人生交給別人。</b></p>
+      </div>
+    </div>
+  </section>
+
+  <footer>© <span id="yr"></span> <span id="brandFoot"></span>｜解讀僅供參考，人生方向由你決定</footer>
+</main>
+
+<div class="toast" id="toast">已複製連結</div>
+
+<script>
+/* ====== 這裡改成你自己的資料 ====== */
+const CONFIG = {
+  igHandle: "your_ig_id",          // 你的 IG 帳號（不含 @）
+  brandName: "懂職場的靈數老師",     // 你的品牌名稱
+  defaultYear: 2027                 // 預設顯示哪一年的流年
+};
+/* ================================== */
+
+const LIFE = {
+  1: { title: "開創型領導者", lead: "你天生就是帶頭的人，最怕被綁手綁腳。",
+       gift: "獨立、果斷、行動力強，敢第一個站出來",
+       fit: "主管、創業、業務開發、新專案負責人",
+       blind: "太強勢、不愛聽建議，容易讓團隊覺得壓力大",
+       tip: "你不是不適合團隊，是需要<b>被授權</b>的位子。爭取能自己做決定的角色。" },
+  2: { title: "細膩型協調者", lead: "你是團隊裡最懂人心的那個，大家都需要你。",
+       gift: "同理心強、細心、擅長合作與溝通協調",
+       fit: "幕僚、特助、HR、客服、專案協調",
+       blind: "不敢爭取、怕衝突，功勞容易被別人拿走",
+       tip: "做得好要<b>讓人知道是你做的</b>。溫柔，但要堅定。" },
+  3: { title: "魅力型表達者", lead: "你一開口，就能讓人記住你。",
+       gift: "口才好、有創意、樂觀，天生有感染力",
+       fit: "行銷、企劃、講師、業務、自媒體",
+       blind: "三分鐘熱度、想做的太多，容易分心",
+       tip: "你的舞台在<b>被看見的地方</b>，別把自己藏在後台。" },
+  4: { title: "穩健型建構者", lead: "你是老闆最放心交辦事情的人。",
+       gift: "務實、有紀律、責任感強，做事扎實可靠",
+       fit: "財務、工程、品管、行政管理、制度建立",
+       blind: "固執、怕變動，容易困在舒適圈太久",
+       tip: "穩定是你的優勢，但每隔幾年要問自己：<b>我是在累積，還是在原地踏步？</b>" },
+  5: { title: "自由型開拓者", lead: "你最怕一成不變，越有挑戰越有精神。",
+       gift: "反應快、應變力強、喜歡新事物、人脈廣",
+       fit: "業務、公關、旅遊、外派、跨領域工作",
+       blind: "定性不足、容易衝動換工作",
+       tip: "換工作之前先問：<b>我是往什麼走，還是只想逃離什麼？</b>" },
+  6: { title: "溫暖型照顧者", lead: "你總是先想到別人，是團隊裡的大家長。",
+       gift: "有責任感、會照顧人、重視和諧與美感",
+       fit: "團隊主管、教育訓練、醫護、服務業、顧問",
+       blind: "當濫好人、把功勞讓給別人，最後委屈自己",
+       tip: "照顧別人可以，但<b>不要犧牲自己</b>。好心不一定有好報，先顧好你自己。" },
+  7: { title: "洞察型思考者", lead: "你看事情比別人深，常常一眼看穿問題。",
+       gift: "分析力強、專注、喜歡鑽研，能成為專家",
+       fit: "研究、技術、數據分析、顧問、專業職",
+       blind: "不愛社交、容易多疑，懷才不遇",
+       tip: "你的專業很值錢，但要學會<b>把它說出來</b>，不然沒人知道你有多厲害。" },
+  8: { title: "目標型實踐者", lead: "你天生就懂得把努力變成成果。",
+       gift: "目標感強、有企圖心、懂資源與財富",
+       fit: "高階管理、業務主管、金融、創業",
+       blind: "太看重結果、給人壓力，忽略身邊的人",
+       tip: "談加薪不要說「我很辛苦」，要說「<b>我幫公司帶來多少</b>」。" },
+  9: { title: "格局型理想者", lead: "你做事不只為自己，總想著能幫到更多人。",
+       gift: "有格局、包容、利他、富有感染力",
+       fit: "諮詢、公益、教育、國際事務、品牌經營",
+       blind: "理想太高、不會拒絕，容易被情緒勒索",
+       tip: "你的善良很珍貴，所以更要<b>選對值得你付出的地方</b>。" }
+};
+
+const YEAR = {
+  1: { title: "重新開始的播種年", lead: "九年循環的起點，你等的機會來了。",
+       do: "轉職、爭取新職位、開始副業或個人品牌",
+       dont: "猶豫不決。這年的種子沒種下，後面八年都沒得收",
+       tip: "我看過太多人一直說「再等等」，結果一等就是十年。<b>今年就開始。</b>" },
+  2: { title: "合作與貴人年", lead: "今年最大的功課不是能力，是「人」。",
+       do: "經營跟主管的關係、找合作夥伴、跨部門合作",
+       dont: "情緒敏感、功勞容易被搶走卻不敢說",
+       tip: "被搶功的時候，<b>溫柔但堅定地讓人知道是你做的。</b>" },
+  3: { title: "表達與曝光年", lead: "今年你再低調，機會就是別人的。",
+       do: "上台報告、主動爭取簡報、經營個人品牌、做自媒體",
+       dont: "話多容易說錯話，想做的事太多容易分心",
+       tip: "升遷的常常不是做最好的人，而是<b>被看見的人</b>。" },
+  4: { title: "打地基的扎根年", lead: "今年會很累，但每一分努力都會變成底氣。",
+       do: "考證照、學新技能、把手上的工作做到扎實",
+       dont: "覺得悶、不被重視，一氣之下就想裸辭",
+       tip: "地基打好的人，後面的流年才蓋得了高樓。<b>先不要衝動離職。</b>" },
+  5: { title: "變動與突破年", lead: "今年工作可能出現意想不到的變化。",
+       do: "換部門、外派出差、接觸新領域，好機會就勇敢轉",
+       dont: "衝動、三分鐘熱度，換了才後悔",
+       tip: "問自己：我是<b>往</b>什麼走，還是只想<b>逃離</b>什麼？" },
+  6: { title: "責任與承擔年", lead: "今年你很可能被賦予更大的責任。",
+       do: "爭取管理職、帶團隊、建立在公司的信任感",
+       dont: "當濫好人，把自己的功勞與利益讓出去",
+       tip: "我曾經把百萬業績灌給下屬，結果人家一點也不感恩。<b>照顧人，但別犧牲自己。</b>" },
+  7: { title: "沉澱與學習年", lead: "如果今年覺得迷惘，那是正常的。",
+       do: "進修、上課、想清楚自己真正要的職涯方向",
+       dont: "懷疑自己、覺得孤單，不適合做重大職涯決定",
+       tip: "這一年不是停滯，是在<b>為流年 8 的收穫做準備</b>。" },
+  8: { title: "收穫與財富年", lead: "今年你不開口要，就是把錢留給老闆。",
+       do: "談加薪、爭取升遷、業績衝刺",
+       dont: "太強勢，或只看錢不看人",
+       tip: "業務主管教你：<b>帶著數字去談</b>，老闆才聽得進去。" },
+  9: { title: "結束與整理年", lead: "今年你可能會想離開一些人、一些事。",
+       do: "結束不適合的工作或關係、整理履歷、斷捨離",
+       dont: "急著開新局，新的開始在明年的流年 1",
+       tip: "清空不是歸零，<b>是為了裝下更好的東西。</b>" }
+};
+
+const $ = (id) => document.getElementById(id);
+const digits = (s) => String(s).split("").map(Number);
+
+function reduce(n) {
+  const steps = [];
+  while (n > 9) {
+    const ds = digits(n);
+    n = ds.reduce((a, b) => a + b, 0);
+    steps.push(ds.join("+") + " = " + n);
+  }
+  return { n, steps };
+}
+function calc(parts) {
+  const ds = parts.flatMap(digits);
+  const sum = ds.reduce((a, b) => a + b, 0);
+  const r = reduce(sum);
+  const text = ds.join("+") + " = " + sum + (r.steps.length ? " → " + r.steps.join(" → ") : "");
+  return { n: r.n, text };
+}
+
+/* 下拉選單 */
+const ySel = $("y"), mSel = $("m"), dSel = $("d");
+function opt(sel, v, label) { const o = document.createElement("option"); o.value = v; o.textContent = label; sel.appendChild(o); }
+opt(ySel, "", "年"); opt(mSel, "", "月"); opt(dSel, "", "日");
+const nowY = new Date().getFullYear();
+for (let y = nowY - 10; y >= 1940; y--) opt(ySel, y, y);
+for (let m = 1; m <= 12; m++) opt(mSel, m, m);
+function fillDays() {
+  const keep = dSel.value;
+  const y = +ySel.value || 2000, m = +mSel.value || 1;
+  const max = new Date(y, m, 0).getDate();
+  dSel.length = 1;
+  for (let d = 1; d <= max; d++) opt(dSel, d, d);
+  if (keep && +keep <= max) dSel.value = keep;
+}
+fillDays();
+ySel.addEventListener("change", fillDays);
+mSel.addEventListener("change", fillDays);
+
+/* 流年年份 */
+let pickYear = CONFIG.defaultYear;
+const chips = $("chips");
+[CONFIG.defaultYear - 1, CONFIG.defaultYear, CONFIG.defaultYear + 1].forEach((yr) => {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "chip"; b.textContent = yr + " 年";
+  b.setAttribute("aria-pressed", yr === pickYear);
+  b.addEventListener("click", () => {
+    pickYear = yr;
+    chips.querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-pressed", c === b));
+    if ($("results").classList.contains("show")) render();
+  });
+  chips.appendChild(b);
+});
+
+function render() {
+  const y = ySel.value, m = mSel.value, d = dSel.value;
+  if (!y || !m || !d) { $("err").textContent = "請完整選擇年、月、日喔！"; return false; }
+  $("err").textContent = "";
+
+  const lp = calc([y, m, d]);
+  const L = LIFE[lp.n];
+  $("lpBadge").textContent = lp.n;
+  $("lpTitle").textContent = lp.n + " 號人｜" + L.title;
+  $("lpCalc").textContent = "計算：" + lp.text;
+  $("lpLead").textContent = L.lead;
+  $("lpGift").textContent = L.gift;
+  $("lpFit").textContent = L.fit;
+  $("lpBlind").textContent = L.blind;
+  $("lpTip").innerHTML = "💡 " + L.tip;
+
+  const py = calc([m, d, pickYear]);
+  const P = YEAR[py.n];
+  $("pyBadge").textContent = py.n;
+  $("pyKicker").textContent = "你的 " + pickYear + " 流年｜職場策略";
+  $("pyTitle").textContent = "流年 " + py.n + "｜" + P.title;
+  $("pyCalc").textContent = "計算（月＋日＋" + pickYear + "）：" + py.text;
+  $("pyLead").textContent = P.lead;
+  $("pyDo").textContent = P.do;
+  $("pyDont").textContent = P.dont;
+  $("pyTip").innerHTML = "💡 " + P.tip;
+  const uni = calc([pickYear]).n;
+  $("pyUniversal").textContent = pickYear === 2027
+    ? "補充：2027 本身是「2」的年（2+0+2+7=11→2），整體走向重視合作與貴人，懂得跟人合作的人會走得更順。"
+    : "補充：" + pickYear + " 年的整體年份能量是「" + uni + "」。";
+  return true;
+}
+
+$("form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (render()) {
+    const r = $("results");
+    r.classList.remove("show"); void r.offsetWidth; r.classList.add("show");
+    r.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+});
+
+/* 品牌與按鈕 */
+$("brandName").textContent = CONFIG.brandName;
+$("brandFoot").textContent = CONFIG.brandName;
+$("yr").textContent = nowY;
+$("ctaLink").href = "https://ig.me/m/" + encodeURIComponent(CONFIG.igHandle);
+
+function toast(msg) {
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 1800);
+}
+$("shareBtn").addEventListener("click", async () => {
+  const data = { title: "算算你的生命靈數", text: "我剛算了我的生命靈數和流年，超準！你也來算算看 👉", url: location.href };
+  try {
+    if (navigator.share) { await navigator.share(data); return; }
+  } catch (e) { if (e && e.name === "AbortError") return; }
+  try { await navigator.clipboard.writeText(location.href); toast("已複製連結"); }
+  catch (e) { toast("請長按網址列複製連結"); }
+});
+</script>
+</body>
+</html>
