@@ -161,7 +161,10 @@
   #results { display: none; }
   #results.show { display: block; animation: rise .5s ease both; }
   @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
-  .num-head { display: flex; align-items: center; gap: 16px; }
+  .pair { display: flex; justify-content: center; gap: 36px; margin: 14px 0 6px; }
+  .pitem { text-align: center; }
+  .pitem .badge { margin: 0 auto; width: 92px; height: 92px; font-size: 48px; }
+  .plabel { margin-top: 8px; font-size: 15px; font-weight: 700; }
   .badge {
     flex: 0 0 auto;
     width: 76px; height: 76px;
@@ -277,44 +280,24 @@
   <div id="results" aria-live="polite">
 
     <section class="card">
-      <div class="num-head">
-        <div class="badge" id="lpBadge">?</div>
-        <div>
-          <div class="kicker">你的生命靈數｜天生職場角色</div>
-          <h3 id="lpTitle"></h3>
+      <div class="kicker" style="text-align:center">你的數字</div>
+      <div class="pair">
+        <div class="pitem">
+          <div class="badge" id="lpBadge">?</div>
+          <div class="plabel">生命靈數</div>
+        </div>
+        <div class="pitem">
+          <div class="badge gold" id="pyBadge">?</div>
+          <div class="plabel" id="pyLabel">流年</div>
         </div>
       </div>
       <p class="calc" id="lpCalc"></p>
-      <p class="lead" id="lpLead"></p>
-      <ul class="kv">
-        <li><span class="k good">天賦</span><span id="lpGift"></span></li>
-        <li><span class="k">適合</span><span id="lpFit"></span></li>
-        <li><span class="k warn">盲點</span><span id="lpBlind"></span></li>
-      </ul>
-      <p class="quote" id="lpTip"></p>
-    </section>
-
-    <section class="card">
-      <div class="num-head">
-        <div class="badge gold" id="pyBadge">?</div>
-        <div>
-          <div class="kicker" id="pyKicker">流年</div>
-          <h3 id="pyTitle"></h3>
-        </div>
-      </div>
       <p class="calc" id="pyCalc"></p>
-      <p class="lead" id="pyLead"></p>
-      <ul class="kv">
-        <li><span class="k good">適合</span><span id="pyDo"></span></li>
-        <li><span class="k warn">注意</span><span id="pyDont"></span></li>
-      </ul>
-      <p class="quote" id="pyTip"></p>
-      <p class="note" id="pyUniversal"></p>
     </section>
 
     <section class="card cta">
-      <h2>想知道更完整的你？</h2>
-      <p>數字只是開始。一對一諮詢，我會結合你的生命靈數、流年和你現在的職場處境，幫你找出下一步該怎麼走。</p>
+      <h2>想知道你的數字代表什麼？</h2>
+      <p id="ctaText"></p>
       <a class="btn" id="ctaLink" href="#" target="_blank" rel="noopener">私訊我「流年」預約諮詢</a>
       <button class="ghost" type="button" id="shareBtn">分享給同事朋友</button>
     </section>
@@ -344,93 +327,6 @@ const CONFIG = {
   defaultYear: 2027                 // 預設顯示哪一年的流年
 };
 /* ================================== */
-
-const LIFE = {
-  1: { title: "開創型領導者", lead: "你天生就是帶頭的人，最怕被綁手綁腳。",
-       gift: "獨立、果斷、行動力強，敢第一個站出來",
-       fit: "主管、創業、業務開發、新專案負責人",
-       blind: "太強勢、不愛聽建議，容易讓團隊覺得壓力大",
-       tip: "你不是不適合團隊，是需要<b>被授權</b>的位子。爭取能自己做決定的角色。" },
-  2: { title: "細膩型協調者", lead: "你是團隊裡最懂人心的那個，大家都需要你。",
-       gift: "同理心強、細心、擅長合作與溝通協調",
-       fit: "幕僚、特助、HR、客服、專案協調",
-       blind: "不敢爭取、怕衝突，功勞容易被別人拿走",
-       tip: "做得好要<b>讓人知道是你做的</b>。溫柔，但要堅定。" },
-  3: { title: "魅力型表達者", lead: "你一開口，就能讓人記住你。",
-       gift: "口才好、有創意、樂觀，天生有感染力",
-       fit: "行銷、企劃、講師、業務、自媒體",
-       blind: "三分鐘熱度、想做的太多，容易分心",
-       tip: "你的舞台在<b>被看見的地方</b>，別把自己藏在後台。" },
-  4: { title: "穩健型建構者", lead: "你是老闆最放心交辦事情的人。",
-       gift: "務實、有紀律、責任感強，做事扎實可靠",
-       fit: "財務、工程、品管、行政管理、制度建立",
-       blind: "固執、怕變動，容易困在舒適圈太久",
-       tip: "穩定是你的優勢，但每隔幾年要問自己：<b>我是在累積，還是在原地踏步？</b>" },
-  5: { title: "自由型開拓者", lead: "你最怕一成不變，越有挑戰越有精神。",
-       gift: "反應快、應變力強、喜歡新事物、人脈廣",
-       fit: "業務、公關、旅遊、外派、跨領域工作",
-       blind: "定性不足、容易衝動換工作",
-       tip: "換工作之前先問：<b>我是往什麼走，還是只想逃離什麼？</b>" },
-  6: { title: "溫暖型照顧者", lead: "你總是先想到別人，是團隊裡的大家長。",
-       gift: "有責任感、會照顧人、重視和諧與美感",
-       fit: "團隊主管、教育訓練、醫護、服務業、顧問",
-       blind: "當濫好人、把功勞讓給別人，最後委屈自己",
-       tip: "照顧別人可以，但<b>不要犧牲自己</b>。好心不一定有好報，先顧好你自己。" },
-  7: { title: "洞察型思考者", lead: "你看事情比別人深，常常一眼看穿問題。",
-       gift: "分析力強、專注、喜歡鑽研，能成為專家",
-       fit: "研究、技術、數據分析、顧問、專業職",
-       blind: "不愛社交、容易多疑，懷才不遇",
-       tip: "你的專業很值錢，但要學會<b>把它說出來</b>，不然沒人知道你有多厲害。" },
-  8: { title: "目標型實踐者", lead: "你天生就懂得把努力變成成果。",
-       gift: "目標感強、有企圖心、懂資源與財富",
-       fit: "高階管理、業務主管、金融、創業",
-       blind: "太看重結果、給人壓力，忽略身邊的人",
-       tip: "談加薪不要說「我很辛苦」，要說「<b>我幫公司帶來多少</b>」。" },
-  9: { title: "格局型理想者", lead: "你做事不只為自己，總想著能幫到更多人。",
-       gift: "有格局、包容、利他、富有感染力",
-       fit: "諮詢、公益、教育、國際事務、品牌經營",
-       blind: "理想太高、不會拒絕，容易被情緒勒索",
-       tip: "你的善良很珍貴，所以更要<b>選對值得你付出的地方</b>。" }
-};
-
-const YEAR = {
-  1: { title: "重新開始的播種年", lead: "九年循環的起點，你等的機會來了。",
-       do: "轉職、爭取新職位、開始副業或個人品牌",
-       dont: "猶豫不決。這年的種子沒種下，後面八年都沒得收",
-       tip: "我看過太多人一直說「再等等」，結果一等就是十年。<b>今年就開始。</b>" },
-  2: { title: "合作與貴人年", lead: "今年最大的功課不是能力，是「人」。",
-       do: "經營跟主管的關係、找合作夥伴、跨部門合作",
-       dont: "情緒敏感、功勞容易被搶走卻不敢說",
-       tip: "被搶功的時候，<b>溫柔但堅定地讓人知道是你做的。</b>" },
-  3: { title: "表達與曝光年", lead: "今年你再低調，機會就是別人的。",
-       do: "上台報告、主動爭取簡報、經營個人品牌、做自媒體",
-       dont: "話多容易說錯話，想做的事太多容易分心",
-       tip: "升遷的常常不是做最好的人，而是<b>被看見的人</b>。" },
-  4: { title: "打地基的扎根年", lead: "今年會很累，但每一分努力都會變成底氣。",
-       do: "考證照、學新技能、把手上的工作做到扎實",
-       dont: "覺得悶、不被重視，一氣之下就想裸辭",
-       tip: "地基打好的人，後面的流年才蓋得了高樓。<b>先不要衝動離職。</b>" },
-  5: { title: "變動與突破年", lead: "今年工作可能出現意想不到的變化。",
-       do: "換部門、外派出差、接觸新領域，好機會就勇敢轉",
-       dont: "衝動、三分鐘熱度，換了才後悔",
-       tip: "問自己：我是<b>往</b>什麼走，還是只想<b>逃離</b>什麼？" },
-  6: { title: "責任與承擔年", lead: "今年你很可能被賦予更大的責任。",
-       do: "爭取管理職、帶團隊、建立在公司的信任感",
-       dont: "當濫好人，把自己的功勞與利益讓出去",
-       tip: "我曾經把百萬業績灌給下屬，結果人家一點也不感恩。<b>照顧人，但別犧牲自己。</b>" },
-  7: { title: "沉澱與學習年", lead: "如果今年覺得迷惘，那是正常的。",
-       do: "進修、上課、想清楚自己真正要的職涯方向",
-       dont: "懷疑自己、覺得孤單，不適合做重大職涯決定",
-       tip: "這一年不是停滯，是在<b>為流年 8 的收穫做準備</b>。" },
-  8: { title: "收穫與財富年", lead: "今年你不開口要，就是把錢留給老闆。",
-       do: "談加薪、爭取升遷、業績衝刺",
-       dont: "太強勢，或只看錢不看人",
-       tip: "業務主管教你：<b>帶著數字去談</b>，老闆才聽得進去。" },
-  9: { title: "結束與整理年", lead: "今年你可能會想離開一些人、一些事。",
-       do: "結束不適合的工作或關係、整理履歷、斷捨離",
-       dont: "急著開新局，新的開始在明年的流年 1",
-       tip: "清空不是歸零，<b>是為了裝下更好的東西。</b>" }
-};
 
 const $ = (id) => document.getElementById(id);
 const digits = (s) => String(s).split("").map(Number);
@@ -492,30 +388,13 @@ function render() {
   $("err").textContent = "";
 
   const lp = calc([y, m, d]);
-  const L = LIFE[lp.n];
-  $("lpBadge").textContent = lp.n;
-  $("lpTitle").textContent = lp.n + " 號人｜" + L.title;
-  $("lpCalc").textContent = "計算：" + lp.text;
-  $("lpLead").textContent = L.lead;
-  $("lpGift").textContent = L.gift;
-  $("lpFit").textContent = L.fit;
-  $("lpBlind").textContent = L.blind;
-  $("lpTip").innerHTML = "💡 " + L.tip;
-
   const py = calc([m, d, pickYear]);
-  const P = YEAR[py.n];
+  $("lpBadge").textContent = lp.n;
   $("pyBadge").textContent = py.n;
-  $("pyKicker").textContent = "你的 " + pickYear + " 流年｜職場策略";
-  $("pyTitle").textContent = "流年 " + py.n + "｜" + P.title;
-  $("pyCalc").textContent = "計算（月＋日＋" + pickYear + "）：" + py.text;
-  $("pyLead").textContent = P.lead;
-  $("pyDo").textContent = P.do;
-  $("pyDont").textContent = P.dont;
-  $("pyTip").innerHTML = "💡 " + P.tip;
-  const uni = calc([pickYear]).n;
-  $("pyUniversal").textContent = pickYear === 2027
-    ? "補充：2027 本身是「2」的年（2+0+2+7=11→2），整體走向重視合作與貴人，懂得跟人合作的人會走得更順。"
-    : "補充：" + pickYear + " 年的整體年份能量是「" + uni + "」。";
+  $("pyLabel").textContent = pickYear + " 流年";
+  $("lpCalc").textContent = "生命靈數：" + lp.text;
+  $("pyCalc").textContent = pickYear + " 流年（月＋日＋" + pickYear + "）：" + py.text;
+  $("ctaText").textContent = "生命靈數 " + lp.n + " × 流年 " + py.n + "，對你的職場代表什麼？該衝還是該蹲？私訊我「流年」，我幫你一對一解讀。";
   return true;
 }
 
