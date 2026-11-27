@@ -184,7 +184,7 @@ function cellWhen(r){
   const td = el("td","when"); const f = fmt(r.due);
   td.append(f.time); td.append(el("small",null,f.date)); return td;
 }
-const TYPES = [["職場","job"],["女性成長","grow"],["生命靈數","num"],["夫妻相處","pair"],["上班族","work"],["好命女人","luck"],["寵物","pet"],["退休理財","money"],["引流","lead"]];
+const TYPES = [["職場","job"],["女性成長","grow"],["數字基因密碼","num"],["夫妻相處","pair"],["上班族","work"],["好命女人","luck"],["寵物","pet"],["退休理財","money"],["引流","lead"]];
 const TKEY = Object.fromEntries(TYPES);
 const SLOTS = ["08:00","12:30","18:00","20:00","22:30"];
 function tpe(d){ const t = new Date(new Date(d).getTime()+8*3600*1000); return t; }
