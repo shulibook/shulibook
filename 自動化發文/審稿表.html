@@ -166,7 +166,7 @@ function cellWhen(r){
 }
 const TYPES = [["職場","job"],["女性成長","grow"],["好命女人","luck"],["生命靈數","num"],["寵物","pet"],["引流","lead"]];
 const TKEY = Object.fromEntries(TYPES);
-const SLOTS = ["08:00","12:30","18:00","20:00","21:30"];
+const SLOTS = ["08:00","12:30","18:00","20:00","22:30"];
 function tpe(d){ const t = new Date(new Date(d).getTime()+8*3600*1000); return t; }
 function dayKey(t){ return t.getUTCFullYear()+"-"+(t.getUTCMonth()+1)+"-"+t.getUTCDate(); }
 function renderCal(){

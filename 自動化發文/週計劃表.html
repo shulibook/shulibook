@@ -2,114 +2,189 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap">
 <style>
-/* Layout: one weekly grid (7 days × 5 time slots), legend with topic notes and weekly counts below */
+/* Layout: weekly grid (7 days × 5 slots, Saturday off). Topic = color family, angle = shade within it. Legend by topic below. */
 :root{
-  --bg:#f6f1ec; --surface:#fffdfb; --line:#e6dbd0; --fg:#3a2e27; --muted:#8a776a; --accent:#a4754f;
-  --job-bg:#dbe7f5; --job-fg:#24507f; --job-bar:#5b8cc4;
-  --grow-bg:#efe0f3; --grow-fg:#6b3a7d; --grow-bar:#a370b6;
-  --luck-bg:#fbe6cf; --luck-fg:#8a5212; --luck-bar:#d9963f;
-  --num-bg:#dcefe2; --num-fg:#2c6b45; --num-bar:#4f9e6e;
-  --pet-bg:#fbe0dc; --pet-fg:#9a3a2c; --pet-bar:#d8705f;
-  --lead-bg:#a4754f; --lead-fg:#ffffff; --lead-bar:#a4754f;
+  --bg:#f6f1ec; --surface:#fffdfb; --line:#e6dbd0; --fg:#3a2e27; --muted:#8a776a;
+  --job-bg:#dbe7f5; --job-fg:#24507f;
+  --pet-bg:#fbe0dc; --pet-fg:#9a3a2c;
+  --lead-bg:#a4754f; --lead-fg:#ffffff;
+  --g1-bg:#6f3a8c; --g1-fg:#ffffff;
+  --g2-bg:#efe0f5; --g2-fg:#6b3a7d;
+  --g3-bg:#a77bc4; --g3-fg:#ffffff;
+  --g4-bg:#d9c3ea; --g4-fg:#4f2a63;
+  --g5-bg:#4b2560; --g5-fg:#ffffff;
+  --g6-bg:#f7f0fb; --g6-fg:#7a4a8c;
+  --l1-bg:#c06a17; --l1-fg:#ffffff;
+  --l2-bg:#fbe6cf; --l2-fg:#8a5212;
+  --l3-bg:#eaa65c; --l3-fg:#3d2205;
+  --l4-bg:#f5d2a6; --l4-fg:#6b3d0a;
+  --l5-bg:#8a4b0e; --l5-fg:#ffffff;
+  --n1-bg:#2f7a4d; --n1-fg:#ffffff;
+  --n2-bg:#dcefe2; --n2-fg:#2c6b45;
+  --n3-bg:#8cc7a2; --n3-fg:#123d24;
+  --n4-bg:#bfe2cb; --n4-fg:#1f5235;
   --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
   --f-head:"Noto Serif TC","PMingLiU",serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#1f1a17; --surface:#2a231f; --line:#3d332d; --fg:#efe6de; --muted:#a8978a; --accent:#d09e75;
-  --job-bg:#1f3247; --job-fg:#a9c8ec; --grow-bg:#3a2840; --grow-fg:#dbb6e8; --luck-bg:#3e2e1c; --luck-fg:#f0c58e;
-  --num-bg:#1f3528; --num-fg:#9fd6b2; --pet-bg:#3f2420; --pet-fg:#f0aea2; --lead-bg:#d09e75; --lead-fg:#1f1a17; color-scheme:dark}}
+  --bg:#1f1a17; --surface:#2a231f; --line:#3d332d; --fg:#efe6de; --muted:#a8978a;
+  --job-bg:#1f3247; --job-fg:#a9c8ec; --pet-bg:#3f2420; --pet-fg:#f0aea2; --lead-bg:#d09e75; --lead-fg:#1f1a17;
+  --g1-bg:#8e55ad; --g2-bg:#3a2840; --g2-fg:#dbb6e8; --g3-bg:#6c4a85; --g4-bg:#4d3560; --g4-fg:#e8d3f5; --g5-bg:#bb8ed6; --g5-fg:#1f1027; --g6-bg:#2e2233; --g6-fg:#d8bfe6;
+  --l1-bg:#d9883a; --l1-fg:#1f1206; --l2-bg:#3e2e1c; --l2-fg:#f0c58e; --l3-bg:#8a5a24; --l3-fg:#fff3e2; --l4-bg:#5a3d1c; --l4-fg:#f6d7ae; --l5-bg:#f0b56e; --l5-fg:#2a1806;
+  --n1-bg:#4f9e6e; --n1-fg:#0d2416; --n2-bg:#1f3528; --n2-fg:#9fd6b2; --n3-bg:#2f6a47; --n3-fg:#e2f5e9; --n4-bg:#264a35; --n4-fg:#c4ead2;
+  color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#1f1a17; --surface:#2a231f; --line:#3d332d; --fg:#efe6de; --muted:#a8978a; --accent:#d09e75;
-  --job-bg:#1f3247; --job-fg:#a9c8ec; --grow-bg:#3a2840; --grow-fg:#dbb6e8; --luck-bg:#3e2e1c; --luck-fg:#f0c58e;
-  --num-bg:#1f3528; --num-fg:#9fd6b2; --pet-bg:#3f2420; --pet-fg:#f0aea2; --lead-bg:#d09e75; --lead-fg:#1f1a17; color-scheme:dark}
+  --bg:#1f1a17; --surface:#2a231f; --line:#3d332d; --fg:#efe6de; --muted:#a8978a;
+  --job-bg:#1f3247; --job-fg:#a9c8ec; --pet-bg:#3f2420; --pet-fg:#f0aea2; --lead-bg:#d09e75; --lead-fg:#1f1a17;
+  --g1-bg:#8e55ad; --g2-bg:#3a2840; --g2-fg:#dbb6e8; --g3-bg:#6c4a85; --g4-bg:#4d3560; --g4-fg:#e8d3f5; --g5-bg:#bb8ed6; --g5-fg:#1f1027; --g6-bg:#2e2233; --g6-fg:#d8bfe6;
+  --l1-bg:#d9883a; --l1-fg:#1f1206; --l2-bg:#3e2e1c; --l2-fg:#f0c58e; --l3-bg:#8a5a24; --l3-fg:#fff3e2; --l4-bg:#5a3d1c; --l4-fg:#f6d7ae; --l5-bg:#f0b56e; --l5-fg:#2a1806;
+  --n1-bg:#4f9e6e; --n1-fg:#0d2416; --n2-bg:#1f3528; --n2-fg:#9fd6b2; --n3-bg:#2f6a47; --n3-fg:#e2f5e9; --n4-bg:#264a35; --n4-fg:#c4ead2;
+  color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.6}
-.wrap{max-width:1100px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:24px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:24px}
 h1,h2{font-family:var(--f-head);margin:0;text-wrap:balance}
 h1{font-size:28px}
 h2{font-size:19px}
 .sub{color:var(--muted);margin:6px 0 0}
 .box{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px}
-table{border-collapse:separate;border-spacing:6px;width:100%;min-width:760px}
+table{border-collapse:separate;border-spacing:6px;width:100%;min-width:860px}
 th,td{padding:0;border:0}
 thead th{font-family:var(--f-head);font-size:17px;padding:8px 0 4px;text-align:center}
 thead th small{display:block;font-family:var(--f-body);font-size:12px;color:var(--muted);font-weight:500}
 tbody th{font-size:14px;font-weight:700;color:var(--muted);text-align:right;padding-right:6px;white-space:nowrap;font-variant-numeric:tabular-nums;width:56px}
-.c{border-radius:10px;height:64px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;text-align:center;padding:4px}
-.c{flex-direction:column;gap:2px}
-.c small{font-size:12px;font-weight:500;opacity:.85}
-.job{background:var(--job-bg);color:var(--job-fg)}
-.grow{background:var(--grow-bg);color:var(--grow-fg)}
-.luck{background:var(--luck-bg);color:var(--luck-fg)}
-.num{background:var(--num-bg);color:var(--num-fg)}
-.pet{background:var(--pet-bg);color:var(--pet-fg)}
-.lead{background:var(--lead-bg);color:var(--lead-fg)}
-.rest{height:100%;min-height:344px;background:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 10px);color:var(--muted);font-size:16px;line-height:1.8}
-.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:grid;gap:12px;min-width:0;align-content:start}
-.leg{display:grid;grid-template-columns:auto 1fr auto;gap:10px 12px;align-items:center}
-.sw{font-size:13px;font-weight:700;padding:3px 10px;border-radius:6px;white-space:nowrap}
-.leg p{margin:0;font-size:14px;color:var(--fg)}
-.leg .n{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
-.bars{display:grid;gap:8px}
-.bar{display:grid;grid-template-columns:72px 1fr 28px;gap:10px;align-items:center;font-size:13px}
-.track{height:12px;background:var(--line);border-radius:6px;overflow:hidden}
-.fill{height:100%;border-radius:6px}
-.bar b{font-variant-numeric:tabular-nums;text-align:right}
+.c{border-radius:10px;height:74px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center;padding:4px 6px}
+.c b{font-size:15px}
+.c small{font-size:12px;font-weight:500;line-height:1.35;opacity:.92}
+.rest{height:100%;min-height:394px;background:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 10px);color:var(--muted);font-size:16px;font-weight:700;line-height:1.8}
+.job{background:var(--job-bg);color:var(--job-fg)} .pet{background:var(--pet-bg);color:var(--pet-fg)} .lead{background:var(--lead-bg);color:var(--lead-fg)}
+.g1{background:var(--g1-bg);color:var(--g1-fg)} .g2{background:var(--g2-bg);color:var(--g2-fg)} .g3{background:var(--g3-bg);color:var(--g3-fg)}
+.g4{background:var(--g4-bg);color:var(--g4-fg)} .g5{background:var(--g5-bg);color:var(--g5-fg)} .g6{background:var(--g6-bg);color:var(--g6-fg);box-shadow:inset 0 0 0 1px var(--g2-bg)}
+.l1{background:var(--l1-bg);color:var(--l1-fg)} .l2{background:var(--l2-bg);color:var(--l2-fg)} .l3{background:var(--l3-bg);color:var(--l3-fg)}
+.l4{background:var(--l4-bg);color:var(--l4-fg)} .l5{background:var(--l5-bg);color:var(--l5-fg)}
+.n1{background:var(--n1-bg);color:var(--n1-fg)} .n2{background:var(--n2-bg);color:var(--n2-fg)} .n3{background:var(--n3-bg);color:var(--n3-fg)} .n4{background:var(--n4-bg);color:var(--n4-fg)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:grid;gap:10px;min-width:0;align-content:start}
+.rows{display:grid;gap:8px}
+.row{display:grid;grid-template-columns:118px 1fr;gap:10px;align-items:start}
+.sw{font-size:13px;font-weight:700;padding:4px 10px;border-radius:6px;text-align:center}
+.row p{margin:0;font-size:14px}
+.row p span{display:block;color:var(--muted);font-size:13px}
 ul{margin:0;padding-left:20px;display:grid;gap:6px;font-size:14px}
 </style>
 
 <div class="wrap">
   <header>
     <h1>惠姐 Threads 週計劃表</h1>
-    <p class="sub">每週重複。週六休息，其他天每天 5 篇、5 個不同主題，全部用 3 串的串文；21:30 固定是引流文。</p>
+    <p class="sub">每週重複。週六休息，其他天每天 5 篇、5 個不同主題，全部用 3 串的串文；引流文晚上 22:30 發。顏色系列代表主題，同一系列的深淺代表不同角度。</p>
   </header>
 
   <div class="box">
     <table>
-      <thead><tr><th></th><th>週一<small>職場日</small></th><th>週二<small>毛孩日</small></th><th>週三<small>職場日</small></th><th>週四<small>毛孩日</small></th><th>週五<small>職場日</small></th><th>週六<small>休息</small></th><th>週日<small>毛孩日</small></th></tr></thead>
+      <thead><tr><th></th>
+        <th>週一<small>職場日</small></th><th>週二<small>毛孩日</small></th><th>週三<small>職場日</small></th><th>週四<small>毛孩日</small></th><th>週五<small>職場日</small></th><th>週六<small>休息</small></th><th>週日<small>毛孩日</small></th>
+      </tr></thead>
       <tbody>
-        <tr><th>08:00</th><td><div class="c job">職場</div></td><td><div class="c grow">女性成長<small>自我價值・不內耗</small></div></td><td><div class="c job">職場</div></td><td><div class="c num">生命靈數</div></td><td><div class="c job">職場</div></td><td rowspan="5"><div class="c rest">休息<br>不發文</div></td><td><div class="c luck">好命女人</div></td></tr>
-        <tr><th>12:30</th><td><div class="c grow">女性成長<small>職場不公平待遇</small></div></td><td><div class="c luck">好命女人</div></td><td><div class="c luck">好命女人</div></td><td><div class="c pet">寵物</div></td><td><div class="c num">生命靈數</div></td><td><div class="c pet">寵物</div></td></tr>
-        <tr><th>18:00</th><td><div class="c num">生命靈數</div></td><td><div class="c pet">寵物</div></td><td><div class="c grow">女性成長<small>職場發展的天花板</small></div></td><td><div class="c luck">好命女人</div></td><td><div class="c luck">好命女人</div></td><td><div class="c grow">女性成長<small>照顧自己的生活</small></div></td></tr>
-        <tr><th>20:00</th><td><div class="c luck">好命女人</div></td><td><div class="c num">生命靈數</div></td><td><div class="c num">生命靈數</div></td><td><div class="c grow">女性成長<small>投資自己・學習</small></div></td><td><div class="c grow">女性成長<small>上班族辛酸史</small></div></td><td><div class="c num">生命靈數</div></td></tr>
-        <tr><th>21:30</th><td><div class="c lead">引流</div></td><td><div class="c lead">引流</div></td><td><div class="c lead">引流</div></td><td><div class="c lead">引流</div></td><td><div class="c lead">引流</div></td><td><div class="c lead">引流</div></td></tr>
+        <tr><th>08:00</th>
+          <td><div class="c job"><b>職場</b></div></td>
+          <td><div class="c g2"><b>女性成長</b><small>自我價值・不內耗</small></div></td>
+          <td><div class="c job"><b>職場</b></div></td>
+          <td><div class="c n3"><b>生命靈數</b><small>數字看夫妻合不合</small></div></td>
+          <td><div class="c job"><b>職場</b></div></td>
+          <td rowspan="5"><div class="c rest">休息<br>不發文</div></td>
+          <td><div class="c l5"><b>好命女人</b><small>金錢與貴人</small></div></td>
+        </tr>
+        <tr><th>12:30</th>
+          <td><div class="c g1"><b>女性成長</b><small>職場不公平待遇</small></div></td>
+          <td><div class="c l2"><b>好命女人</b><small>好命習慣</small></div></td>
+          <td><div class="c l3"><b>好命女人</b><small>說話與界線</small></div></td>
+          <td><div class="c pet"><b>寵物</b></div></td>
+          <td><div class="c n4"><b>生命靈數</b><small>1～9 號天賦個性</small></div></td>
+          <td><div class="c pet"><b>寵物</b></div></td>
+        </tr>
+        <tr><th>18:00</th>
+          <td><div class="c n1"><b>生命靈數</b><small>幾號狗狗最乖</small></div></td>
+          <td><div class="c pet"><b>寵物</b></div></td>
+          <td><div class="c g3"><b>女性成長</b><small>職場發展天花板</small></div></td>
+          <td><div class="c l1"><b>好命女人</b><small>夫妻相處之道</small></div></td>
+          <td><div class="c l4"><b>好命女人</b><small>打扮旺運</small></div></td>
+          <td><div class="c g6"><b>女性成長</b><small>照顧自己的生活</small></div></td>
+        </tr>
+        <tr><th>20:00</th>
+          <td><div class="c l1"><b>好命女人</b><small>夫妻相處之道</small></div></td>
+          <td><div class="c n2"><b>生命靈數</b><small>數字看職場發展</small></div></td>
+          <td><div class="c n1"><b>生命靈數</b><small>你和毛孩合不合</small></div></td>
+          <td><div class="c g4"><b>女性成長</b><small>投資自己</small></div></td>
+          <td><div class="c g5"><b>女性成長</b><small>上班族辛酸史</small></div></td>
+          <td><div class="c n2"><b>生命靈數</b><small>數字看適合的工作</small></div></td>
+        </tr>
+        <tr><th>22:30</th>
+          <td><div class="c lead"><b>引流</b></div></td><td><div class="c lead"><b>引流</b></div></td><td><div class="c lead"><b>引流</b></div></td>
+          <td><div class="c lead"><b>引流</b></div></td><td><div class="c lead"><b>引流</b></div></td><td><div class="c lead"><b>引流</b></div></td>
+        </tr>
       </tbody>
     </table>
   </div>
 
-  <div class="grid2">
+  <div class="grid3">
     <section class="card">
-      <h2>主題與內容</h2>
-      <div class="leg">
-        <span class="sw job">職場</span><p>職場人性、主管心法、離職與第二收入</p><span class="n">週一三五</span>
-        <span class="sw grow">女性成長</span><p>每天換角度：職場不公平待遇、發展天花板、上班族辛酸、自我價值、投資自己</p><span class="n">每天 1 篇</span>
-        <span class="sw luck">好命女人</span><p>好命習慣、打扮旺運、說話與界線</p><span class="n">每天 1 篇</span>
-        <span class="sw num">生命靈數</span><p>數字基因密碼 1～9 號的天賦與個性</p><span class="n">每天 1 篇</span>
-        <span class="sw pet">寵物</span><p>養狗知識與毛孩的陪伴</p><span class="n">週二四日</span>
-        <span class="sw lead">引流</span><p>主頁連結免費算、留言數字、私訊「流年」</p><span class="n">每天 21:30</span>
+      <h2>女性成長（紫色系）</h2>
+      <div class="rows">
+        <div class="row"><span class="sw g1">職場不公平待遇</span><p>週一<span>同工不同酬、升遷被跳過、面試被問結婚生子</span></p></div>
+        <div class="row"><span class="sw g2">自我價值・不內耗</span><p>週二<span>不討好、不委屈、學會說不</span></p></div>
+        <div class="row"><span class="sw g3">職場發展天花板</span><p>週三<span>中年轉職難、女主管少、顧家被說不夠拚</span></p></div>
+        <div class="row"><span class="sw g4">投資自己</span><p>週四<span>技能、證照、第二收入、人脈</span></p></div>
+        <div class="row"><span class="sw g5">上班族辛酸史</span><p>週五<span>加班、薪水不夠用、被主管罵、一個人撐一個家</span></p></div>
+        <div class="row"><span class="sw g6">照顧自己的生活</span><p>週日<span>休息、身體、留時間給自己</span></p></div>
       </div>
     </section>
 
+    <section class="card">
+      <h2>好命女人（橘色系）</h2>
+      <div class="rows">
+        <div class="row"><span class="sw l1">夫妻相處之道</span><p>週一、週四<span>該有的尊重、該有的禮貌、好好說話、不在外人面前數落</span></p></div>
+        <div class="row"><span class="sw l2">好命習慣</span><p>週二<span>好命女人每天在做的事</span></p></div>
+        <div class="row"><span class="sw l3">說話與界線</span><p>週三<span>會說話的女人、被討厭的勇氣</span></p></div>
+        <div class="row"><span class="sw l4">打扮旺運</span><p>週五<span>先有貴相，才有貴人</span></p></div>
+        <div class="row"><span class="sw l5">金錢與貴人</span><p>週日<span>自己的錢、身邊的貴人</span></p></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>生命靈數（綠色系）</h2>
+      <div class="rows">
+        <div class="row"><span class="sw n1">靈數 × 毛孩</span><p>週一、週三<span>幾號狗狗最乖、你和毛孩的數字合不合</span></p></div>
+        <div class="row"><span class="sw n2">靈數 × 職場</span><p>週二、週日<span>數字看職場發展、適合的工作與位置</span></p></div>
+        <div class="row"><span class="sw n3">靈數 × 感情</span><p>週四<span>夫妻的數字合不合、怎麼相處</span></p></div>
+        <div class="row"><span class="sw n4">數字天賦</span><p>週五<span>1～9 號的個性與天賦</span></p></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="grid3">
+    <section class="card">
+      <h2>其他主題</h2>
+      <div class="rows">
+        <div class="row"><span class="sw job">職場</span><p>週一三五 08:00<span>職場人性、主管心法、離職與第二收入</span></p></div>
+        <div class="row"><span class="sw pet">寵物</span><p>週二四日<span>養狗知識與毛孩的陪伴</span></p></div>
+        <div class="row"><span class="sw lead">引流</span><p>每天 22:30<span>主頁連結免費算、留言數字、私訊「流年」</span></p></div>
+      </div>
+    </section>
     <section class="card">
       <h2>每週篇數（共 30 篇）</h2>
-      <div class="bars">
-        <div class="bar"><span>女性成長</span><div class="track"><div class="fill" style="width:100%;background:var(--grow-bar)"></div></div><b>6</b></div>
-        <div class="bar"><span>好命女人</span><div class="track"><div class="fill" style="width:100%;background:var(--luck-bar)"></div></div><b>6</b></div>
-        <div class="bar"><span>生命靈數</span><div class="track"><div class="fill" style="width:100%;background:var(--num-bar)"></div></div><b>6</b></div>
-        <div class="bar"><span>引流</span><div class="track"><div class="fill" style="width:100%;background:var(--lead-bar)"></div></div><b>6</b></div>
-        <div class="bar"><span>職場</span><div class="track"><div class="fill" style="width:50%;background:var(--job-bar)"></div></div><b>3</b></div>
-        <div class="bar"><span>寵物</span><div class="track"><div class="fill" style="width:50%;background:var(--pet-bar)"></div></div><b>3</b></div>
-      </div>
+      <ul>
+        <li>女性成長 6、好命女人 6、生命靈數 6、引流 6</li>
+        <li>職場 3（週一三五）、寵物 3（週二四日）</li>
+        <li>毛孩相關：寵物 3 篇＋靈數毛孩 2 篇，分在不同天</li>
+      </ul>
     </section>
-
     <section class="card">
       <h2>排文規則</h2>
       <ul>
         <li>週六不發文；同一天的 5 篇都是不同主題</li>
+        <li>引流文一律晚上 22:30 發</li>
         <li>每篇分 3 串：第 1 串短、斷在下一點的標題，第 3 串用金句收尾</li>
-        <li>跟星期有關的文排在對的那天，例如「星期一不想上班」排週一</li>
-        <li>同系列的文分散到該主題的不同天</li>
+        <li>跟星期有關的文排在對的那天，同系列分散到不同天</li>
         <li>對標只用抖音、小紅書 10 萬讚以上的內容，學架構不照抄</li>
       </ul>
     </section>
