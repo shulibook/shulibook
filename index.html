@@ -323,9 +323,25 @@
 const CONFIG = {
   igHandle: "shulibook",           // 你的 IG 帳號（不含 @）
   brandName: "惠姐｜職場成長與數字基因密碼",// 你的品牌名稱
-  defaultYear: 2027                 // 預設顯示哪一年的流年
+  defaultYear: 2027,                // 預設顯示哪一年的流年
+  gaId: ""                          // Google Analytics 4 評估 ID（G- 開頭），留空則不追蹤
 };
 /* ================================== */
+
+/* 網站流量分析（Google Analytics 4）。不會傳送生日。 */
+window.dataLayer = window.dataLayer || [];
+function gtag() { dataLayer.push(arguments); }
+if (/^G-[A-Z0-9]+$/i.test(CONFIG.gaId)) {
+  const s = document.createElement("script");
+  s.async = true;
+  s.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(CONFIG.gaId);
+  document.head.appendChild(s);
+  gtag("js", new Date());
+  gtag("config", CONFIG.gaId);
+}
+function track(name, params) {
+  try { if (CONFIG.gaId) gtag("event", name, params || {}); } catch (e) {}
+}
 
 const $ = (id) => document.getElementById(id);
 const digits = (s) => String(s).split("").map(Number);
@@ -375,6 +391,7 @@ const chips = $("chips");
   b.setAttribute("aria-pressed", yr === pickYear);
   b.addEventListener("click", () => {
     pickYear = yr;
+    track("select_year", { year: yr });
     chips.querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-pressed", c === b));
     if ($("results").classList.contains("show")) render();
   });
@@ -400,6 +417,7 @@ function render() {
 $("form").addEventListener("submit", (e) => {
   e.preventDefault();
   if (render()) {
+    track("calculate", { life_path: +$("lpBadge").textContent, personal_year: +$("pyBadge").textContent, year: pickYear });
     const r = $("results");
     r.classList.remove("show"); void r.offsetWidth; r.classList.add("show");
     r.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -411,12 +429,15 @@ $("brandName").textContent = CONFIG.brandName;
 $("brandFoot").textContent = "惠姐 @" + CONFIG.igHandle;
 $("yr").textContent = nowY;
 $("ctaLink").href = "https://ig.me/m/" + encodeURIComponent(CONFIG.igHandle);
+$("ctaLink").addEventListener("click", () => track("book_consult", { life_path: +$("lpBadge").textContent }));
+document.querySelectorAll('a[href*="instagram.com"]').forEach((a) => a.addEventListener("click", () => track("visit_ig")));
 
 function toast(msg) {
   const t = $("toast"); t.textContent = msg; t.classList.add("show");
   setTimeout(() => t.classList.remove("show"), 1800);
 }
 $("shareBtn").addEventListener("click", async () => {
+  track("share");
   const data = { title: "算算你的數字基因密碼", text: "我剛算了我的數字基因密碼和流年，超準！你也來算算看 👉", url: location.href };
   try {
     if (navigator.share) { await navigator.share(data); return; }
