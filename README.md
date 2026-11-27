@@ -13,6 +13,15 @@ const CONFIG = {
 };
 ```
 
+要在預約按鈕下方加一個網站連結，修改 `CONFIG` 裡的 `extraLink`：
+
+```js
+extraLink: {
+  url: "https://example.com",   // 網址（留空就不顯示）
+  label: "看看我的網站"           // 按鈕文字
+}
+```
+
 預約按鈕會開啟 IG 私訊，數字的解讀留在一對一諮詢中說明。
 
 ## 上線（GitHub Pages，免費）

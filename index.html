@@ -225,6 +225,8 @@
     padding: 11px;
     cursor: pointer;
   }
+  .cta a.ghost { box-sizing: border-box; text-decoration: none; }
+  .cta .ghost[hidden] { display: none; }
 
   /* About */
   .about { display: flex; gap: 14px; align-items: flex-start; }
@@ -297,6 +299,7 @@
       <h2>想知道你的數字代表什麼？</h2>
       <p id="ctaText"></p>
       <a class="btn" id="ctaLink" href="#" target="_blank" rel="noopener">私訊我「流年」預約諮詢</a>
+      <a class="ghost" id="extraLink" href="#" target="_blank" rel="noopener" hidden></a>
       <button class="ghost" type="button" id="shareBtn">分享給同事朋友</button>
     </section>
 
@@ -323,7 +326,11 @@
 const CONFIG = {
   igHandle: "shulibook",           // 你的 IG 帳號（不含 @）
   brandName: "惠姐｜職場成長與數字基因密碼",// 你的品牌名稱
-  defaultYear: 2027                 // 預設顯示哪一年的流年
+  defaultYear: 2027,                // 預設顯示哪一年的流年
+  extraLink: {                      // 預約按鈕下方的連結（網址留空就不顯示）
+    url: "",                        // 例如 "https://example.com"
+    label: "看看我的網站"             // 按鈕文字
+  }
 };
 /* ================================== */
 
@@ -411,6 +418,11 @@ $("brandName").textContent = CONFIG.brandName;
 $("brandFoot").textContent = "惠姐 @" + CONFIG.igHandle;
 $("yr").textContent = nowY;
 $("ctaLink").href = "https://ig.me/m/" + encodeURIComponent(CONFIG.igHandle);
+if (CONFIG.extraLink && CONFIG.extraLink.url) {
+  $("extraLink").href = CONFIG.extraLink.url;
+  $("extraLink").textContent = CONFIG.extraLink.label;
+  $("extraLink").hidden = false;
+}
 
 function toast(msg) {
   const t = $("toast"); t.textContent = msg; t.classList.add("show");
