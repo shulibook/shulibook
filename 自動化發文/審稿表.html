@@ -1,0 +1,232 @@
+<title>惠姐貼文審稿表</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap">
+<style>
+/* Layout: one review column; pending table on top, then 修改 and OK lists below */
+:root{
+  --bg:#f6f1ec; --surface:#fffdfb; --line:#e6dbd0; --fg:#3a2e27; --muted:#8a776a;
+  --accent:#a4754f; --accent-ink:#fff; --ok:#3f7d5a; --ok-bg:#e4f1e8; --edit:#b5652e; --edit-bg:#fbeadc;
+  --chip:#efe5db;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --f-head:"Noto Serif TC","PMingLiU",serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1f1a17; --surface:#2a231f; --line:#3d332d; --fg:#efe6de; --muted:#a8978a;
+  --accent:#d09e75; --accent-ink:#1f1a17; --ok:#7fc39b; --ok-bg:#22352a; --edit:#e8a06c; --edit-bg:#3a2a1f; --chip:#362d27; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1f1a17; --surface:#2a231f; --line:#3d332d; --fg:#efe6de; --muted:#a8978a;
+  --accent:#d09e75; --accent-ink:#1f1a17; --ok:#7fc39b; --ok-bg:#22352a; --edit:#e8a06c; --edit-bg:#3a2a1f; --chip:#362d27; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.6}
+.wrap{max-width:980px;margin:0 auto;padding-block:28px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:28px}
+h1,h2{font-family:var(--f-head);margin:0;text-wrap:balance}
+h1{font-size:26px}
+h2{font-size:19px;display:flex;align-items:center;gap:10px}
+.sub{color:var(--muted);margin:6px 0 0}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.stat{background:var(--chip);border-radius:999px;padding:4px 12px;font-size:13px;font-variant-numeric:tabular-nums}
+.stat b{font-weight:700}
+.note{font-size:13px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.count{font-family:var(--f-body);font-size:13px;font-weight:500;color:var(--muted)}
+.tablebox{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;vertical-align:top;padding:12px 14px;border-bottom:1px solid var(--line)}
+th{font-size:12px;letter-spacing:.06em;color:var(--muted);font-weight:500;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.when{white-space:nowrap;font-variant-numeric:tabular-nums;font-weight:500}
+td.when small{display:block;color:var(--muted);font-weight:400}
+.type{display:inline-block;font-size:12px;padding:2px 8px;border-radius:6px;background:var(--chip);white-space:nowrap}
+.type.引流{background:var(--accent);color:var(--accent-ink)}
+.src{display:block;font-size:11px;color:var(--muted);margin-top:4px;white-space:nowrap}
+.text{white-space:pre-wrap;min-width:240px;max-width:52ch}
+.text .old{color:var(--muted);text-decoration:line-through;display:block;margin-top:8px;font-size:13px}
+.memo{display:block;margin-top:8px;font-size:13px;color:var(--edit)}
+.acts{display:flex;flex-direction:column;gap:6px;white-space:nowrap}
+button{font:inherit;font-size:14px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:6px 14px;cursor:pointer}
+button:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button.ok{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+button.edit{color:var(--edit);border-color:var(--edit)}
+button.ghost{font-size:13px;padding:4px 10px;color:var(--muted)}
+button:disabled{opacity:.5;cursor:default}
+.editor{display:grid;gap:8px;margin-top:4px}
+textarea,input[type=text]{width:100%;font:inherit;font-size:14px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+textarea{min-height:220px;resize:vertical;line-height:1.6}
+.editor .row{display:flex;gap:8px;flex-wrap:wrap}
+.len{font-size:12px;color:var(--muted)}
+.len.over{color:var(--edit)}
+.pill{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}
+.pill.edit{background:var(--edit-bg);color:var(--edit)}
+.empty{padding:22px;text-align:center;color:var(--muted)}
+#status{font-size:13px;color:var(--muted)}
+@media (max-width:640px){
+  thead{display:none}
+  table,tbody,tr,td{display:block;width:100%}
+  tr{border-bottom:1px solid var(--line);padding:12px 0}
+  td{border:0;padding:4px 14px}
+  .text{min-width:0;max-width:none}
+  .acts{flex-direction:row;flex-wrap:wrap}
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>惠姐貼文審稿表</h1>
+    <p class="sub">Threads @shulibook・每則按「OK」或「修改」。OK 的貼文會由每日任務排進 Buffer；修改的我會照你的意見改好再給你看。</p>
+    <div class="stats" id="stats"></div>
+    <p id="status">讀取中…</p>
+  </header>
+
+  <section>
+    <h2>待審 <span class="count" id="c-pending"></span></h2>
+    <div class="tablebox" style="margin-top:12px">
+      <table>
+        <thead><tr><th>發文時間</th><th>類型</th><th>內容</th><th>審核</th></tr></thead>
+        <tbody id="t-pending"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>修改 <span class="count" id="c-edit"></span></h2>
+    <div class="tablebox" style="margin-top:12px">
+      <table>
+        <thead><tr><th>發文時間</th><th>類型</th><th>內容與意見</th><th></th></tr></thead>
+        <tbody id="t-edit"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>OK・上排程 <span class="count" id="c-ok"></span></h2>
+    <div class="tablebox" style="margin-top:12px">
+      <table>
+        <thead><tr><th>發文時間</th><th>類型</th><th>內容</th><th>排程狀態</th></tr></thead>
+        <tbody id="t-ok"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <p class="note">審完跟 Claude 說一聲「審好了」，就會把 OK 的上排程、把修改的改好。Buffer 免費方案同時最多排 10 則，OK 的貼文會依時間順序陸續排進去。</p>
+</div>
+
+<script>
+const WD = ["日","一","二","三","四","五","六"];
+let db = null, rows = [], editing = null, drafts = {};
+
+function fmt(due){
+  const d = new Date(due);
+  const t = new Date(d.getTime() + 8*3600*1000); // Asia/Taipei
+  const mm = String(t.getUTCMonth()+1), dd = String(t.getUTCDate());
+  const hh = String(t.getUTCHours()).padStart(2,"0"), mi = String(t.getUTCMinutes()).padStart(2,"0");
+  return {date: mm+"/"+dd+"（"+WD[t.getUTCDay()]+"）", time: hh+":"+mi};
+}
+function el(tag, cls, text){ const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
+function btn(label, cls, fn){ const b=el("button",cls,label); b.type="button"; b.addEventListener("click",fn); return b; }
+
+function cellWhen(r){
+  const td = el("td","when"); const f = fmt(r.due);
+  td.append(f.time); td.append(el("small",null,f.date)); return td;
+}
+function cellType(r){
+  const td = el("td"); td.append(el("span","type "+r.type, r.type));
+  td.append(el("span","src", r.source==="scheduled" ? "Buffer 已排程" : "Buffer 點子"));
+  return td;
+}
+function currentText(r){ return r.editedText || r.text; }
+
+async function save(id, patch){
+  if(!db){ setStatus("目前無法儲存，請重新整理頁面再試。"); return; }
+  try{
+    await db.collection("posts").doc(id).update(Object.assign({updatedAt: new Date().toISOString()}, patch));
+    setStatus("已儲存");
+  }catch(e){ setStatus("儲存失敗："+(e && e.message ? e.message : "請稍後再試")); }
+}
+function setStatus(s){ document.getElementById("status").textContent = s; }
+
+function editorCell(r){
+  const td = el("td","text");
+  const box = el("div","editor");
+  const ta = el("textarea"); ta.id = "ta-"+r.id;
+  ta.value = drafts[r.id]?.text ?? currentText(r);
+  const len = el("span","len");
+  const upd = ()=>{ const n=[...ta.value].length; len.textContent = n+" / 500 字"; len.className = "len"+(n>500?" over":""); drafts[r.id]=Object.assign(drafts[r.id]||{}, {text: ta.value}); };
+  ta.addEventListener("input", upd); upd();
+  const memo = el("input"); memo.type="text"; memo.id="memo-"+r.id; memo.placeholder="修改意見（選填）：例如「語氣再溫柔一點」「換成我自己的故事」";
+  memo.value = drafts[r.id]?.note ?? (r.note || "");
+  memo.addEventListener("input", ()=>{ drafts[r.id]=Object.assign(drafts[r.id]||{}, {note: memo.value}); });
+  const row = el("div","row");
+  row.append(
+    btn("儲存到「修改」","edit",()=>{ const t=ta.value.trim(); const changed = t && t!==r.text; editing=null; delete drafts[r.id];
+      save(r.id,{status:"edit", editedText: changed ? t : "", note: memo.value.trim()}); }),
+    btn("直接 OK（用這版）","ok",()=>{ const t=ta.value.trim(); const changed = t && t!==r.text; editing=null; delete drafts[r.id];
+      save(r.id,{status:"ok", editedText: changed ? t : "", note: ""}); }),
+    btn("取消","ghost",()=>{ editing=null; delete drafts[r.id]; render(); })
+  );
+  box.append(ta, len, memo, row); td.append(box); return td;
+}
+function textCell(r, showMemo){
+  const td = el("td","text"); td.append(currentText(r));
+  if(r.editedText) td.append(el("span","old","原文：" + r.text.split("\n")[0] + "…"));
+  if(showMemo && r.note) td.append(el("span","memo","意見：" + r.note));
+  return td;
+}
+
+function render(){
+  const pend = rows.filter(r=>!r.status || r.status==="pending");
+  const ed = rows.filter(r=>r.status==="edit");
+  const ok = rows.filter(r=>r.status==="ok");
+  document.getElementById("c-pending").textContent = pend.length+" 則";
+  document.getElementById("c-edit").textContent = ed.length+" 則";
+  document.getElementById("c-ok").textContent = ok.length+" 則";
+  const st = document.getElementById("stats"); st.replaceChildren();
+  const add=(k,v)=>{ const s=el("span","stat"); s.append(k+" "); s.append(el("b",null,String(v))); st.append(s); };
+  add("全部", rows.length); add("待審", pend.length); add("修改", ed.length); add("OK", ok.length);
+  add("已在 Buffer 排程", rows.filter(r=>r.source==="scheduled" || r.scheduled).length);
+
+  const fill = (id, list, mk, emptyMsg)=>{
+    const tb = document.getElementById(id); tb.replaceChildren();
+    if(!list.length){ const tr=el("tr"); const td=el("td","empty",emptyMsg); td.colSpan=4; tr.append(td); tb.append(tr); return; }
+    list.forEach(r=>tb.append(mk(r)));
+  };
+  fill("t-pending", pend, r=>{
+    const tr = el("tr"); tr.append(cellWhen(r), cellType(r));
+    if(editing===r.id){ tr.append(editorCell(r), el("td")); return tr; }
+    tr.append(textCell(r,false));
+    const td = el("td"); const a = el("div","acts");
+    a.append(btn("OK","ok",()=>save(r.id,{status:"ok"})), btn("修改","edit",()=>{ editing=r.id; render(); document.getElementById("ta-"+r.id)?.focus(); }));
+    td.append(a); tr.append(td); return tr;
+  }, "全部審完了 👍");
+  fill("t-edit", ed, r=>{
+    const tr = el("tr"); tr.append(cellWhen(r), cellType(r));
+    if(editing===r.id){ tr.append(editorCell(r), el("td")); return tr; }
+    tr.append(textCell(r,true));
+    const td = el("td"); const a = el("div","acts");
+    a.append(el("span","pill edit", r.editedText ? "已改稿" : "待 Claude 修改"),
+      btn("再改","ghost",()=>{ editing=r.id; render(); }),
+      btn("改成 OK","ghost",()=>save(r.id,{status:"ok"})));
+    td.append(a); tr.append(td); return tr;
+  }, "目前沒有要修改的貼文");
+  fill("t-ok", ok, r=>{
+    const tr = el("tr"); tr.append(cellWhen(r), cellType(r), textCell(r,false));
+    const td = el("td"); const a = el("div","acts");
+    const on = r.source==="scheduled" || r.scheduled;
+    a.append(el("span","pill "+(on?"ok":"edit"), on ? "已上排程" : "等待上排程"),
+      btn("退回待審","ghost",()=>save(r.id,{status:"pending"})));
+    td.append(a); tr.append(td); return tr;
+  }, "還沒有 OK 的貼文");
+}
+
+render();
+(async ()=>{
+  const timer = setTimeout(()=>setStatus("連線較慢，請稍候或重新整理。"), 10000);
+  db = await claude.use("db");
+  if(!db){ clearTimeout(timer); setStatus("請先登入 claude.ai 才能讀取與儲存審稿結果。"); return; }
+  db.collection("posts").orderBy("due").onSnapshot(snap=>{
+    clearTimeout(timer);
+    rows = snap.docs.map(d=>Object.assign({id:d.id}, d.data()));
+    setStatus(rows.length ? "已同步，點選後會自動儲存。" : "貼文還沒載入，請稍候。");
+    render();
+  }, e=>{ clearTimeout(timer); setStatus("讀取失敗："+(e && e.message ? e.message : "請重新整理頁面")); });
+})();
+</script>
