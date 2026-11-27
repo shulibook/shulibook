@@ -9,9 +9,19 @@
 const CONFIG = {
   igHandle: "your_ig_id",       // 你的 IG 帳號（不含 @）
   brandName: "懂職場的靈數老師",  // 你的品牌名稱
-  defaultYear: 2027              // 預設顯示哪一年的流年
+  defaultYear: 2027,             // 預設顯示哪一年的流年
+  testimonials: [ ... ]          // 學員/客戶見證
 };
 ```
+
+### 新增學員/客戶見證
+在 `testimonials` 裡複製一組貼上（每組之間用逗號隔開）：
+
+```js
+{ name: "王小姐", role: "科技業 PM", number: 8, text: "學員的心得……" }
+```
+
+`number`（數字基因密碼）可省略。`testimonials` 清空成 `[]` 時，見證區塊會自動隱藏。
 
 預約按鈕會開啟 IG 私訊，數字的解讀留在一對一諮詢中說明。
 

@@ -236,6 +236,20 @@
   .about p { margin: 0; font-size: 15px; }
   .about .name { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
 
+  /* Testimonials */
+  .tlist { display: grid; gap: 12px; margin-top: 4px; }
+  .tcard {
+    margin: 0;
+    padding: 14px 16px;
+    background: var(--surface-2);
+    border-radius: 14px;
+  }
+  .tcard blockquote { margin: 0; font-size: 15px; }
+  .tcard blockquote::before { content: "“"; font-family: "Noto Serif TC", serif; font-size: 28px; line-height: 0; vertical-align: -10px; margin-right: 2px; color: var(--accent); }
+  .tcard figcaption { margin-top: 8px; font-size: 13px; color: var(--muted); }
+  .tcard figcaption b { color: var(--ink); font-weight: 700; margin-right: 6px; }
+  .tcard .tnum { display: inline-block; margin-left: 6px; font-size: 12px; color: var(--accent-ink); border: 1px solid var(--accent); border-radius: 999px; padding: 0 8px; }
+
   footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 28px; }
   .toast {
     position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
@@ -302,6 +316,12 @@
 
   </div>
 
+  <section class="card" id="testimonials" aria-labelledby="t-title" hidden>
+    <h2 id="t-title">學員怎麼說</h2>
+    <p class="sub">一對一諮詢後的真實回饋</p>
+    <div class="tlist" id="tlist"></div>
+  </section>
+
   <section class="card">
     <div class="about">
       <a href="https://www.instagram.com/shulibook/" target="_blank" rel="noopener"><img class="avatar" src="avatar.jpg" alt="惠姐的大頭照" width="48" height="48"></a>
@@ -323,7 +343,16 @@
 const CONFIG = {
   igHandle: "shulibook",           // 你的 IG 帳號（不含 @）
   brandName: "惠姐｜職場成長與數字基因密碼",// 你的品牌名稱
-  defaultYear: 2027                 // 預設顯示哪一年的流年
+  defaultYear: 2027,                // 預設顯示哪一年的流年
+  // 學員/客戶見證：要新增一位，就複製一組 { ... } 貼在下面，用逗號隔開
+  testimonials: [
+    {
+      name: "王小姐",                // 名字（可用匿名，例如「王小姐」）
+      role: "科技業 PM・10 年資歷",    // 職稱或身分
+      number: 8,                     // 他的數字基因密碼（不想顯示就刪掉這行）
+      text: "（請換成這位學員的真實心得）"
+    }
+  ]
 };
 /* ================================== */
 
@@ -411,6 +440,24 @@ $("brandName").textContent = CONFIG.brandName;
 $("brandFoot").textContent = "惠姐 @" + CONFIG.igHandle;
 $("yr").textContent = nowY;
 $("ctaLink").href = "https://ig.me/m/" + encodeURIComponent(CONFIG.igHandle);
+
+/* 學員見證 */
+(function renderTestimonials() {
+  const list = CONFIG.testimonials || [];
+  if (!list.length) return;
+  const box = $("tlist");
+  list.forEach((t) => {
+    const fig = document.createElement("figure"); fig.className = "tcard";
+    const q = document.createElement("blockquote"); q.textContent = t.text;
+    const cap = document.createElement("figcaption");
+    const b = document.createElement("b"); b.textContent = t.name || "學員";
+    cap.appendChild(b);
+    if (t.role) cap.appendChild(document.createTextNode(t.role));
+    if (t.number) { const n = document.createElement("span"); n.className = "tnum"; n.textContent = "密碼 " + t.number; cap.appendChild(n); }
+    fig.append(q, cap); box.appendChild(fig);
+  });
+  $("testimonials").hidden = false;
+})();
 
 function toast(msg) {
   const t = $("toast"); t.textContent = msg; t.classList.add("show");
