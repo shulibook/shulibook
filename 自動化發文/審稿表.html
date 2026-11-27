@@ -127,7 +127,7 @@ textarea{min-height:220px;resize:vertical;line-height:1.6}
 
   <section>
     <h2>排程總覽</h2>
-    <p class="sub">一週一張表，顏色代表主題。點任何一格就能看整篇內容。✓ 已 OK、● 已在 Buffer 排好、待審 還沒審、虛線框 還沒有貼文、斜線 週六休息。</p>
+    <p class="sub">一週一張表，顏色代表主題。點任何一格就能看整篇內容。「已排程」已經放進 Buffer、「已OK」審過了等著排進 Buffer、「待審」還沒審、虛線框 還沒有貼文、斜線 週六休息。</p>
     <div class="legend" id="legend"></div>
     <div class="weeks" id="cal"></div>
     <div class="sheet" id="sheet" hidden></div>
@@ -195,7 +195,7 @@ function partsOf(r){
   const ps = t.split(/【\d\/\d】\n?/).map(x=>x.trim()).filter(Boolean);
   return ps.length ? ps : [t];
 }
-function statusMark(r){ const on = r.source==="scheduled" || r.scheduled; return on ? "●" : (r.status==="ok" ? "✓" : (r.status==="edit" ? "改" : "待審")); }
+function statusMark(r){ const on = r.source==="scheduled" || r.scheduled; return on ? "已排程" : (r.status==="ok" ? "已OK" : (r.status==="edit" ? "改" : "待審")); }
 function mkCell(r){
   const c = el("button","cell t-"+(TKEY[r.type]||"job")+(new Date(r.due).getTime()<Date.now()?" sent":""));
   c.type="button";
@@ -216,7 +216,7 @@ function openSheet(id){
   partsOf(r).forEach((p,i,arr)=>{ const d=el("div","part"); d.append(el("b",null,(i+1)+"/"+arr.length)); d.append(p); sh.append(d); });
   if(r.note) sh.append(el("span","memo","意見："+r.note));
   const bs = el("div","btns");
-  bs.append(el("span","pill "+(r.status==="ok"?"ok":"edit"), statusMark(r)==="●"?"已在 Buffer 排好":(r.status==="ok"?"已 OK":(r.status==="edit"?"待修改":"待審"))));
+  bs.append(el("span","pill "+(r.status==="ok"?"ok":"edit"), statusMark(r)==="已排程"?"已在 Buffer 排好":(r.status==="ok"?"已 OK":(r.status==="edit"?"待修改":"待審"))));
   if(r.status!=="ok") bs.append(btn("OK","ok",()=>{ save(r.id,{status:"ok"}); sh.hidden=true; }));
   bs.append(btn("修改","edit",()=>{ sh.hidden=true; editing=r.id; render(); setTimeout(()=>{ const ta=document.getElementById("ta-"+r.id); if(ta){ ta.scrollIntoView({block:"center"}); ta.focus(); } },50); }));
   sh.append(bs); sh.hidden=false;
