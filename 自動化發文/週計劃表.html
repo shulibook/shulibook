@@ -42,6 +42,7 @@ tbody th{font-size:14px;font-weight:700;color:var(--muted);text-align:right;padd
 .num{background:var(--num-bg);color:var(--num-fg)}
 .pet{background:var(--pet-bg);color:var(--pet-fg)}
 .lead{background:var(--lead-bg);color:var(--lead-fg)}
+.rest{height:100%;min-height:344px;background:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 10px);color:var(--muted);font-size:16px;line-height:1.8}
 .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:grid;gap:12px;min-width:0;align-content:start}
 .leg{display:grid;grid-template-columns:auto 1fr auto;gap:10px 12px;align-items:center}
@@ -59,21 +60,18 @@ ul{margin:0;padding-left:20px;display:grid;gap:6px;font-size:14px}
 <div class="wrap">
   <header>
     <h1>惠姐 Threads 週計劃表</h1>
-    <p class="sub">每週重複。每天 5 篇，全部用 3 串的串文；21:30 固定是引流文，同一個主題不會每天出現。</p>
+    <p class="sub">每週重複。週六休息，其他天每天 5 篇、5 個不同主題，全部用 3 串的串文；21:30 固定是引流文。</p>
   </header>
 
   <div class="box">
     <table>
-      <thead><tr><th></th>
-        <th>週一<small>職場日</small></th><th>週二<small>好命日</small></th><th>週三<small>職場日</small></th>
-        <th>週四<small>好命日</small></th><th>週五<small>職場日</small></th><th>週六<small>好命日</small></th><th>週日<small>輕鬆日</small></th>
-      </tr></thead>
+      <thead><tr><th></th><th>週一<small>職場日</small></th><th>週二<small>毛孩日</small></th><th>週三<small>職場日</small></th><th>週四<small>毛孩日</small></th><th>週五<small>職場日</small></th><th>週六<small>休息</small></th><th>週日<small>毛孩日</small></th></tr></thead>
       <tbody>
-        <tr><th>08:00</th><td><div class="c job">職場</div></td><td><div class="c luck">好命女人</div></td><td><div class="c job">職場</div></td><td><div class="c num">生命靈數</div></td><td><div class="c job">職場</div></td><td><div class="c luck">好命女人</div></td><td><div class="c num">生命靈數</div></td></tr>
-        <tr><th>12:30</th><td><div class="c grow">女性成長</div></td><td><div class="c luck">好命女人</div></td><td><div class="c grow">女性成長</div></td><td><div class="c luck">好命女人</div></td><td><div class="c grow">女性成長</div></td><td><div class="c luck">好命女人</div></td><td><div class="c pet">寵物</div></td></tr>
-        <tr><th>18:00</th><td><div class="c job">職場</div></td><td><div class="c pet">寵物</div></td><td><div class="c job">職場</div></td><td><div class="c num">生命靈數</div></td><td><div class="c job">職場</div></td><td><div class="c num">生命靈數</div></td><td><div class="c luck">好命女人</div></td></tr>
-        <tr><th>20:00</th><td><div class="c grow">女性成長</div></td><td><div class="c num">生命靈數</div></td><td><div class="c grow">女性成長</div></td><td><div class="c luck">好命女人</div></td><td><div class="c grow">女性成長</div></td><td><div class="c pet">寵物</div></td><td><div class="c num">生命靈數</div></td></tr>
-        <tr><th>21:30</th><td><div class="c lead">引流</div></td><td><div class="c lead">引流</div></td><td><div class="c lead">引流</div></td><td><div class="c lead">引流</div></td><td><div class="c lead">引流</div></td><td><div class="c lead">引流</div></td><td><div class="c lead">引流</div></td></tr>
+        <tr><th>08:00</th><td><div class="c job">職場</div></td><td><div class="c grow">女性成長</div></td><td><div class="c job">職場</div></td><td><div class="c num">生命靈數</div></td><td><div class="c job">職場</div></td><td rowspan="5"><div class="c rest">休息<br>不發文</div></td><td><div class="c luck">好命女人</div></td></tr>
+        <tr><th>12:30</th><td><div class="c grow">女性成長</div></td><td><div class="c luck">好命女人</div></td><td><div class="c luck">好命女人</div></td><td><div class="c pet">寵物</div></td><td><div class="c num">生命靈數</div></td><td><div class="c pet">寵物</div></td></tr>
+        <tr><th>18:00</th><td><div class="c num">生命靈數</div></td><td><div class="c pet">寵物</div></td><td><div class="c grow">女性成長</div></td><td><div class="c luck">好命女人</div></td><td><div class="c luck">好命女人</div></td><td><div class="c grow">女性成長</div></td></tr>
+        <tr><th>20:00</th><td><div class="c luck">好命女人</div></td><td><div class="c num">生命靈數</div></td><td><div class="c num">生命靈數</div></td><td><div class="c grow">女性成長</div></td><td><div class="c grow">女性成長</div></td><td><div class="c num">生命靈數</div></td></tr>
+        <tr><th>21:30</th><td><div class="c lead">引流</div></td><td><div class="c lead">引流</div></td><td><div class="c lead">引流</div></td><td><div class="c lead">引流</div></td><td><div class="c lead">引流</div></td><td><div class="c lead">引流</div></td></tr>
       </tbody>
     </table>
   </div>
@@ -83,29 +81,30 @@ ul{margin:0;padding-left:20px;display:grid;gap:6px;font-size:14px}
       <h2>主題與內容</h2>
       <div class="leg">
         <span class="sw job">職場</span><p>職場人性、主管心法、離職與第二收入</p><span class="n">週一三五</span>
-        <span class="sw grow">女性成長</span><p>自我價值、減少內耗、投資自己</p><span class="n">週一三五</span>
-        <span class="sw luck">好命女人</span><p>好命習慣、打扮旺運、說話與界線</p><span class="n">週二四六日</span>
-        <span class="sw num">生命靈數</span><p>數字基因密碼 1～9 號的天賦與個性</p><span class="n">週二四六日</span>
-        <span class="sw pet">寵物</span><p>養狗知識與毛孩的陪伴</p><span class="n">週二六日</span>
-        <span class="sw lead">引流</span><p>主頁連結免費算、留言數字、私訊「流年」</p><span class="n">每天</span>
+        <span class="sw grow">女性成長</span><p>自我價值、減少內耗、投資自己</p><span class="n">每天 1 篇</span>
+        <span class="sw luck">好命女人</span><p>好命習慣、打扮旺運、說話與界線</p><span class="n">每天 1 篇</span>
+        <span class="sw num">生命靈數</span><p>數字基因密碼 1～9 號的天賦與個性</p><span class="n">每天 1 篇</span>
+        <span class="sw pet">寵物</span><p>養狗知識與毛孩的陪伴</p><span class="n">週二四日</span>
+        <span class="sw lead">引流</span><p>主頁連結免費算、留言數字、私訊「流年」</p><span class="n">每天 21:30</span>
       </div>
     </section>
 
     <section class="card">
-      <h2>每週篇數（共 35 篇）</h2>
+      <h2>每週篇數（共 30 篇）</h2>
       <div class="bars">
-        <div class="bar"><span>好命女人</span><div class="track"><div class="fill" style="width:100%;background:var(--luck-bar)"></div></div><b>7</b></div>
-        <div class="bar"><span>引流</span><div class="track"><div class="fill" style="width:100%;background:var(--lead-bar)"></div></div><b>7</b></div>
-        <div class="bar"><span>職場</span><div class="track"><div class="fill" style="width:85.7%;background:var(--job-bar)"></div></div><b>6</b></div>
-        <div class="bar"><span>女性成長</span><div class="track"><div class="fill" style="width:85.7%;background:var(--grow-bar)"></div></div><b>6</b></div>
-        <div class="bar"><span>生命靈數</span><div class="track"><div class="fill" style="width:85.7%;background:var(--num-bar)"></div></div><b>6</b></div>
-        <div class="bar"><span>寵物</span><div class="track"><div class="fill" style="width:42.9%;background:var(--pet-bar)"></div></div><b>3</b></div>
+        <div class="bar"><span>女性成長</span><div class="track"><div class="fill" style="width:100%;background:var(--grow-bar)"></div></div><b>6</b></div>
+        <div class="bar"><span>好命女人</span><div class="track"><div class="fill" style="width:100%;background:var(--luck-bar)"></div></div><b>6</b></div>
+        <div class="bar"><span>生命靈數</span><div class="track"><div class="fill" style="width:100%;background:var(--num-bar)"></div></div><b>6</b></div>
+        <div class="bar"><span>引流</span><div class="track"><div class="fill" style="width:100%;background:var(--lead-bar)"></div></div><b>6</b></div>
+        <div class="bar"><span>職場</span><div class="track"><div class="fill" style="width:50%;background:var(--job-bar)"></div></div><b>3</b></div>
+        <div class="bar"><span>寵物</span><div class="track"><div class="fill" style="width:50%;background:var(--pet-bar)"></div></div><b>3</b></div>
       </div>
     </section>
 
     <section class="card">
       <h2>排文規則</h2>
       <ul>
+        <li>週六不發文；同一天的 5 篇都是不同主題</li>
         <li>每篇分 3 串：第 1 串短、斷在下一點的標題，第 3 串用金句收尾</li>
         <li>跟星期有關的文排在對的那天，例如「星期一不想上班」排週一</li>
         <li>同系列的文分散到該主題的不同天</li>
