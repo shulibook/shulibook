@@ -244,6 +244,27 @@
     opacity: 0; pointer-events: none; transition: opacity .25s;
   }
   .toast.show { opacity: 1; }
+  /* 配對測驗 */
+  .who { font-size: 14px; font-weight: 700; margin: 16px 0 2px; }
+  .who:first-of-type { margin-top: 4px; }
+  .vs { align-self: center; font-family: "Noto Serif TC", serif; font-size: 26px; color: var(--muted); margin-top: -26px; }
+  #mres { margin-top: 22px; padding-top: 18px; border-top: 1px dashed var(--line); text-align: center; }
+  #mres[hidden] { display: none; }
+  #mres .pair { gap: 18px; }
+  .score { margin-top: 10px; font-size: 15px; color: var(--muted); }
+  .score b { font-family: "Noto Serif TC", serif; font-size: 46px; color: var(--accent-ink); line-height: 1.2; }
+  .mtype { display: inline-block; margin-top: 4px; font-size: 14px; font-weight: 700; color: var(--accent-ink); border: 1px solid var(--accent); border-radius: 999px; padding: 1px 14px; }
+  #mres .lead { text-align: center; }
+  #mres .btn { text-decoration: none; }
+
+  /* 限動圖彈窗 */
+  .sheet { position: fixed; inset: 0; background: rgba(20, 14, 10, .6); display: grid; place-items: center; padding: 16px; z-index: 10; }
+  .sheet[hidden] { display: none; }
+  .sheet-box { background: var(--surface); border-radius: 18px; padding: 16px; width: 100%; max-width: 360px; text-align: center; max-height: 100%; overflow: auto; }
+  .sheet-box img { display: block; width: 100%; max-width: 240px; margin: 0 auto; border-radius: 12px; box-shadow: var(--shadow); }
+  .sheet-box .ghost { display: block; width: 100%; margin-top: 10px; font: inherit; font-size: 15px; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 14px; padding: 11px; cursor: pointer; }
+  .sheet-box .btn { margin-top: 14px; }
+
   @media (min-width: 600px) { .hero h1 { font-size: 36px; } }
 </style>
 </head>
@@ -297,10 +318,46 @@
       <h2>想知道你的數字代表什麼？</h2>
       <p id="ctaText"></p>
       <a class="btn" id="ctaLink" href="#" target="_blank" rel="noopener">私訊我「流年」預約諮詢</a>
+      <button class="ghost" type="button" id="storyBtn">📸 產生我的 IG 限動圖</button>
       <button class="ghost" type="button" id="shareBtn">分享給同事朋友</button>
     </section>
 
   </div>
+
+  <section class="card" id="matchCard" aria-labelledby="match-title">
+    <div class="kicker">免費小測驗</div>
+    <h2 id="match-title">你和他，合不合？</h2>
+    <p class="sub">輸入兩個人的國曆生日，看看你們的數字合拍指數。</p>
+    <form id="mform" novalidate>
+      <div class="who">對方是你的…</div>
+      <div class="chips" id="relChips" role="group" aria-label="選擇關係"></div>
+      <div class="who">你的生日</div>
+      <div class="row">
+        <label class="field">年<select id="ay"></select></label>
+        <label class="field">月<select id="am"></select></label>
+        <label class="field">日<select id="ad"></select></label>
+      </div>
+      <div class="who" id="otherWho">主管的生日</div>
+      <div class="row">
+        <label class="field">年<select id="by"></select></label>
+        <label class="field">月<select id="bm"></select></label>
+        <label class="field">日<select id="bd"></select></label>
+      </div>
+      <p class="err" id="merr" role="alert"></p>
+      <button class="btn" type="submit">✦ 看看合不合</button>
+    </form>
+    <div id="mres" aria-live="polite" hidden>
+      <div class="pair">
+        <div class="pitem"><div class="badge" id="maBadge">?</div><div class="plabel">你</div></div>
+        <div class="vs">×</div>
+        <div class="pitem"><div class="badge gold" id="mbBadge">?</div><div class="plabel" id="mbLabel">主管</div></div>
+      </div>
+      <div class="score">合拍指數 <b id="mScore">0</b>%</div>
+      <div class="mtype" id="mType"></div>
+      <p class="lead" id="mLine"></p>
+      <a class="btn" id="mCta" href="#" target="_blank" rel="noopener">私訊我「配對」，看相處攻略</a>
+    </div>
+  </section>
 
   <section class="card">
     <div class="about">
@@ -317,6 +374,15 @@
 </main>
 
 <div class="toast" id="toast">已複製連結</div>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="IG 限動圖" hidden>
+  <div class="sheet-box">
+    <img id="storyImg" alt="你的數字基因密碼限動圖">
+    <p class="note">手機可以長按圖片儲存，再到 IG 發限動並標記 @shulibook 喔！</p>
+    <button class="btn" type="button" id="saveImg">儲存圖片</button>
+    <button class="ghost" type="button" id="closeSheet">關閉</button>
+  </div>
+</div>
 
 <script>
 /* ====== 這裡改成你自己的資料 ====== */
@@ -348,23 +414,27 @@ function calc(parts) {
 }
 
 /* 下拉選單 */
-const ySel = $("y"), mSel = $("m"), dSel = $("d");
 function opt(sel, v, label) { const o = document.createElement("option"); o.value = v; o.textContent = label; sel.appendChild(o); }
-opt(ySel, "", "年"); opt(mSel, "", "月"); opt(dSel, "", "日");
 const nowY = new Date().getFullYear();
-for (let y = nowY - 10; y >= 1940; y--) opt(ySel, y, y);
-for (let m = 1; m <= 12; m++) opt(mSel, m, m);
-function fillDays() {
-  const keep = dSel.value;
-  const y = +ySel.value || 2000, m = +mSel.value || 1;
-  const max = new Date(y, m, 0).getDate();
-  dSel.length = 1;
-  for (let d = 1; d <= max; d++) opt(dSel, d, d);
-  if (keep && +keep <= max) dSel.value = keep;
+function setupDate(ySel, mSel, dSel) {
+  opt(ySel, "", "年"); opt(mSel, "", "月"); opt(dSel, "", "日");
+  for (let y = nowY - 10; y >= 1940; y--) opt(ySel, y, y);
+  for (let m = 1; m <= 12; m++) opt(mSel, m, m);
+  function fillDays() {
+    const keep = dSel.value;
+    const y = +ySel.value || 2000, m = +mSel.value || 1;
+    const max = new Date(y, m, 0).getDate();
+    dSel.length = 1;
+    for (let d = 1; d <= max; d++) opt(dSel, d, d);
+    if (keep && +keep <= max) dSel.value = keep;
+  }
+  fillDays();
+  ySel.addEventListener("change", fillDays);
+  mSel.addEventListener("change", fillDays);
+  return fillDays;
 }
-fillDays();
-ySel.addEventListener("change", fillDays);
-mSel.addEventListener("change", fillDays);
+const ySel = $("y"), mSel = $("m"), dSel = $("d");
+setupDate(ySel, mSel, dSel);
 
 /* 流年年份 */
 let pickYear = CONFIG.defaultYear;
@@ -381,6 +451,7 @@ const chips = $("chips");
   chips.appendChild(b);
 });
 
+let last = null;
 function render() {
   const y = ySel.value, m = mSel.value, d = dSel.value;
   if (!y || !m || !d) { $("err").textContent = "請完整選擇年、月、日喔！"; return false; }
@@ -393,6 +464,7 @@ function render() {
   $("pyLabel").textContent = pickYear + " 流年";
   $("lpCalc").textContent = "數字基因密碼：" + lp.text;
   $("pyCalc").textContent = pickYear + " 流年（月＋日＋" + pickYear + "）：" + py.text;
+  last = { lp: lp.n, py: py.n, year: pickYear };
   $("ctaText").textContent = "數字基因密碼 " + lp.n + " × 流年 " + py.n + "，對你的職場代表什麼？該衝還是該蹲？私訊我「流年」，我幫你一對一解讀。";
   return true;
 }
@@ -400,6 +472,8 @@ function render() {
 $("form").addEventListener("submit", (e) => {
   e.preventDefault();
   if (render()) {
+    // 順便幫配對測驗帶入「你的生日」
+    $("ay").value = ySel.value; $("am").value = mSel.value; fillA(); $("ad").value = dSel.value;
     const r = $("results");
     r.classList.remove("show"); void r.offsetWidth; r.classList.add("show");
     r.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -423,6 +497,171 @@ $("shareBtn").addEventListener("click", async () => {
   } catch (e) { if (e && e.name === "AbortError") return; }
   try { await navigator.clipboard.writeText(location.href); toast("已複製連結"); }
   catch (e) { toast("請長按網址列複製連結"); }
+});
+
+/* ====== 配對測驗：你和他合不合？ ====== */
+const fillA = setupDate($("ay"), $("am"), $("ad"));
+setupDate($("by"), $("bm"), $("bd"));
+
+const RELS = ["主管", "同事", "另一半", "朋友"];
+let rel = RELS[0];
+const relChips = $("relChips");
+RELS.forEach((r) => {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "chip"; b.textContent = r;
+  b.setAttribute("aria-pressed", r === rel);
+  b.addEventListener("click", () => {
+    rel = r;
+    relChips.querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-pressed", c === b));
+    $("otherWho").textContent = r + "的生日";
+    if (!$("mres").hidden) matchRender();
+  });
+  relChips.appendChild(b);
+});
+
+/* 數字分三群：1·5·7 主導思考型、2·4·8 務實執行型、3·6·9 感受表達型
+   ↓ 合拍類型、基本分數與短評都可以自己改 */
+const GROUP = { 1: "A", 5: "A", 7: "A", 2: "B", 4: "B", 8: "B", 3: "C", 6: "C", 9: "C" };
+const MATCH = {
+  same: { name: "同頻型", base: 84, line: "你們很懂彼此在想什麼，但也容易一起踩進同一個坑。" },
+  group: { name: "默契型", base: 90, line: "做事節奏很合，常常不用多說就有共識。" },
+  AB: { name: "互補型", base: 76, line: "一個敢衝、一個求穩，搭得好是神隊友，搭不好會互相嫌對方。" },
+  AC: { name: "火花型", base: 80, line: "點子一個接一個，聊得很起勁，但容易沒人負責收尾。" },
+  BC: { name: "磨合型", base: 68, line: "一個重效率、一個重感受，說話的方式就是你們的關鍵。" }
+};
+function matchOf(a, b) {
+  let key;
+  if (a === b) key = "same";
+  else if (GROUP[a] === GROUP[b]) key = "group";
+  else key = [GROUP[a], GROUP[b]].sort().join("");
+  const m = MATCH[key];
+  return { ...m, score: m.base + ((a + b) % 5) - 2 };
+}
+
+function matchRender() {
+  const a = [$("ay").value, $("am").value, $("ad").value];
+  const b = [$("by").value, $("bm").value, $("bd").value];
+  if (a.includes("") || b.includes("")) { $("merr").textContent = "請把兩個人的年、月、日都選好喔！"; return false; }
+  $("merr").textContent = "";
+  const na = calc(a).n, nb = calc(b).n;
+  const m = matchOf(na, nb);
+  $("maBadge").textContent = na;
+  $("mbBadge").textContent = nb;
+  $("mbLabel").textContent = rel;
+  $("mScore").textContent = m.score;
+  $("mType").textContent = m.name;
+  $("mLine").textContent = m.line;
+  $("mCta").textContent = "私訊我「配對」，看跟" + rel + "的相處攻略";
+  return true;
+}
+$("mform").addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (matchRender()) {
+    const r = $("mres");
+    r.hidden = false;
+    r.style.animation = "none"; void r.offsetWidth; r.style.animation = "rise .5s ease both";
+    r.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+});
+$("mCta").href = "https://ig.me/m/" + encodeURIComponent(CONFIG.igHandle);
+
+/* ====== IG 限動圖（1080 × 1920） ====== */
+async function drawStory() {
+  const W = 1080, H = 1920;
+  const cv = document.createElement("canvas");
+  cv.width = W; cv.height = H;
+  const c = cv.getContext("2d");
+  const SERIF = '"Noto Serif TC", "PMingLiU", serif';
+  const SANS = '"Noto Sans TC", "PingFang TC", sans-serif';
+  const allText = "數字基因密碼職場我的流年對代表什麼？你是多少免費算算看搜尋惠姐成長與＋×@0123456789IG shulibook｜";
+  try {
+    await Promise.all([
+      document.fonts.load("700 80px " + SERIF, allText),
+      document.fonts.load("700 40px " + SANS, allText),
+      document.fonts.load("400 40px " + SANS, allText)
+    ]);
+  } catch (e) {}
+
+  // 背景
+  const bg = c.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0, "#fbf7f2"); bg.addColorStop(1, "#e6d2bd");
+  c.fillStyle = bg; c.fillRect(0, 0, W, H);
+  c.strokeStyle = "rgba(185,138,99,.45)"; c.lineWidth = 3;
+  c.strokeRect(60, 60, W - 120, H - 120);
+
+  c.textAlign = "center"; c.textBaseline = "middle";
+
+  // 標籤
+  c.font = "700 36px " + SANS;
+  const tag = "數字基因密碼 × 職場";
+  const tw = c.measureText(tag).width + 80;
+  c.strokeStyle = "#b98a63"; c.lineWidth = 3;
+  c.beginPath(); c.roundRect(W / 2 - tw / 2, 300, tw, 76, 38); c.stroke();
+  c.fillStyle = "#8a5a35"; c.fillText(tag, W / 2, 340);
+
+  // 標題
+  c.fillStyle = "#3d2f27";
+  c.font = "700 92px " + SERIF;
+  c.fillText("我的生日密碼", W / 2, 500);
+
+  // 兩顆數字圓
+  function badge(x, y, r, n, gold) {
+    const g = c.createRadialGradient(x - r * .3, y - r * .4, r * .1, x, y, r);
+    if (gold) { g.addColorStop(0, "#f6e6d5"); g.addColorStop(1, "#d9b593"); }
+    else { g.addColorStop(0, "#c9a383"); g.addColorStop(1, "#9c7352"); }
+    c.fillStyle = g; c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill();
+    c.strokeStyle = "rgba(255,255,255,.7)"; c.lineWidth = 8;
+    c.beginPath(); c.arc(x, y, r - 10, 0, Math.PI * 2); c.stroke();
+    c.fillStyle = gold ? "#3d2f27" : "#ffffff";
+    c.font = "700 " + Math.round(r * 1.05) + "px " + SERIF;
+    c.fillText(n, x, y + r * .06);
+  }
+  badge(330, 820, 175, last.lp, false);
+  badge(750, 820, 175, last.py, true);
+  c.fillStyle = "#3d2f27"; c.font = "700 44px " + SANS;
+  c.fillText("數字基因密碼", 330, 1060);
+  c.fillText(last.year + " 流年", 750, 1060);
+
+  // 引言
+  c.fillStyle = "#8a5a35"; c.font = "700 60px " + SERIF;
+  c.fillText("對我的職場代表什麼？", W / 2, 1240);
+
+  // 分隔線
+  c.strokeStyle = "rgba(185,138,99,.6)"; c.lineWidth = 3;
+  c.beginPath(); c.moveTo(W / 2 - 120, 1380); c.lineTo(W / 2 + 120, 1380); c.stroke();
+
+  // 邀請
+  c.fillStyle = "#3d2f27"; c.font = "400 50px " + SANS;
+  c.fillText("你的數字是多少？", W / 2, 1480);
+  c.fillStyle = "#8a5a35"; c.font = "700 54px " + SANS;
+  c.fillText("IG 搜尋 @" + CONFIG.igHandle + " 免費算", W / 2, 1570);
+
+  c.fillStyle = "#7b6a5f"; c.font = "400 34px " + SANS;
+  c.fillText(CONFIG.brandName, W / 2, 1720);
+
+  return cv;
+}
+
+let storyBlob = null;
+$("storyBtn").addEventListener("click", async () => {
+  if (!last) return;
+  toast("圖片製作中…");
+  const cv = await drawStory();
+  storyBlob = await new Promise((res) => cv.toBlob(res, "image/png"));
+  $("storyImg").src = cv.toDataURL("image/png");
+  $("sheet").hidden = false;
+});
+$("closeSheet").addEventListener("click", () => { $("sheet").hidden = true; });
+$("sheet").addEventListener("click", (e) => { if (e.target === $("sheet")) $("sheet").hidden = true; });
+$("saveImg").addEventListener("click", async () => {
+  if (!storyBlob) return;
+  const file = new File([storyBlob], "我的數字基因密碼.png", { type: "image/png" });
+  try {
+    if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file] }); return; }
+  } catch (e) { if (e && e.name === "AbortError") return; }
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(storyBlob); a.download = file.name;
+  document.body.appendChild(a); a.click(); a.remove();
 });
 </script>
 </body>
