@@ -236,7 +236,24 @@
   .about p { margin: 0; font-size: 15px; }
   .about .name { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
 
-  footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 28px; }
+  footer { padding-bottom: 56px; text-align: center; color: var(--muted); font-size: 12px; margin-top: 28px; }
+  .btn.line {
+    color: #ffffff;
+    background: #06c755;
+    box-shadow: 0 6px 16px rgba(6, 199, 85, .3);
+    margin-top: 10px;
+  }
+  .btn.line svg, .line-fab svg { width: 22px; height: 22px; vertical-align: -5px; margin-right: 6px; }
+  .line-fab {
+    position: fixed; right: 16px; bottom: 20px; z-index: 10;
+    display: flex; align-items: center;
+    background: #06c755; color: #ffffff;
+    font-size: 14px; font-weight: 700; text-decoration: none;
+    border-radius: 999px; padding: 10px 16px 10px 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .18);
+  }
+  .line-fab svg { margin-right: 4px; }
+  [hidden] { display: none !important; }
   .toast {
     position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
     background: var(--ink); color: var(--bg);
@@ -296,6 +313,7 @@
     <section class="card cta">
       <h2>想知道你的數字代表什麼？</h2>
       <p id="ctaText"></p>
+      <a class="btn line" id="lineCta" href="#" target="_blank" rel="noopener" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6c1.5-1.6 2-3.2 2-4.8C22 6.6 17.5 3 12 3Zm-3.8 10.6H6.3a.5.5 0 0 1-.5-.5V9.2a.5.5 0 0 1 1 0v3.4h1.4a.5.5 0 0 1 0 1Zm2-.5a.5.5 0 0 1-1 0V9.2a.5.5 0 0 1 1 0Zm4.6 0a.5.5 0 0 1-.9.3l-2-2.7v2.4a.5.5 0 0 1-1 0V9.2a.5.5 0 0 1 .9-.3l2 2.7V9.2a.5.5 0 0 1 1 0Zm3.1-2.4a.5.5 0 0 1 0 1h-1.4v.9h1.4a.5.5 0 0 1 0 1h-1.9a.5.5 0 0 1-.5-.5V9.2c0-.3.2-.5.5-.5h1.9a.5.5 0 0 1 0 1h-1.4v.9Z"/></svg>用 LINE 問惠姐</a>
       <a class="btn" id="ctaLink" href="#" target="_blank" rel="noopener">私訊我「流年」預約諮詢</a>
       <button class="ghost" type="button" id="shareBtn">分享給同事朋友</button>
     </section>
@@ -316,6 +334,8 @@
   <footer>© <span id="yr"></span> <span id="brandFoot"></span>｜解讀僅供參考，人生方向由你決定</footer>
 </main>
 
+<a class="line-fab" id="lineFab" href="#" target="_blank" rel="noopener" hidden aria-label="加入 LINE 官方帳號"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6c1.5-1.6 2-3.2 2-4.8C22 6.6 17.5 3 12 3Zm-3.8 10.6H6.3a.5.5 0 0 1-.5-.5V9.2a.5.5 0 0 1 1 0v3.4h1.4a.5.5 0 0 1 0 1Zm2-.5a.5.5 0 0 1-1 0V9.2a.5.5 0 0 1 1 0Zm4.6 0a.5.5 0 0 1-.9.3l-2-2.7v2.4a.5.5 0 0 1-1 0V9.2a.5.5 0 0 1 .9-.3l2 2.7V9.2a.5.5 0 0 1 1 0Zm3.1-2.4a.5.5 0 0 1 0 1h-1.4v.9h1.4a.5.5 0 0 1 0 1h-1.9a.5.5 0 0 1-.5-.5V9.2c0-.3.2-.5.5-.5h1.9a.5.5 0 0 1 0 1h-1.4v.9Z"/></svg>LINE 管家</a>
+
 <div class="toast" id="toast">已複製連結</div>
 
 <script>
@@ -323,7 +343,8 @@
 const CONFIG = {
   igHandle: "shulibook",           // 你的 IG 帳號（不含 @）
   brandName: "惠姐｜職場成長與數字基因密碼",// 你的品牌名稱
-  defaultYear: 2027                 // 預設顯示哪一年的流年
+  defaultYear: 2027,                // 預設顯示哪一年的流年
+  lineId: ""                        // LINE 官方帳號 ID（含 @，例如 "@123abcde"）；留空則不顯示 LINE 按鈕
 };
 /* ================================== */
 
@@ -393,6 +414,10 @@ function render() {
   $("pyLabel").textContent = pickYear + " 流年";
   $("lpCalc").textContent = "數字基因密碼：" + lp.text;
   $("pyCalc").textContent = pickYear + " 流年（月＋日＋" + pickYear + "）：" + py.text;
+  if (CONFIG.lineId) {
+    const msg = "惠姐您好，我想預約解讀：數字基因密碼 " + lp.n + "，" + pickYear + " 流年 " + py.n;
+    $("lineCta").href = "https://line.me/R/oaMessage/" + encodeURIComponent(CONFIG.lineId) + "/?" + encodeURIComponent(msg);
+  }
   $("ctaText").textContent = "數字基因密碼 " + lp.n + " × 流年 " + py.n + "，對你的職場代表什麼？該衝還是該蹲？私訊我「流年」，我幫你一對一解讀。";
   return true;
 }
@@ -411,6 +436,12 @@ $("brandName").textContent = CONFIG.brandName;
 $("brandFoot").textContent = "惠姐 @" + CONFIG.igHandle;
 $("yr").textContent = nowY;
 $("ctaLink").href = "https://ig.me/m/" + encodeURIComponent(CONFIG.igHandle);
+
+if (CONFIG.lineId) {
+  $("lineFab").href = "https://line.me/R/ti/p/" + encodeURIComponent(CONFIG.lineId);
+  $("lineFab").hidden = false;
+  $("lineCta").hidden = false;
+}
 
 function toast(msg) {
   const t = $("toast"); t.textContent = msg; t.classList.add("show");

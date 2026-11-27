@@ -9,9 +9,16 @@
 const CONFIG = {
   igHandle: "your_ig_id",       // 你的 IG 帳號（不含 @）
   brandName: "懂職場的靈數老師",  // 你的品牌名稱
-  defaultYear: 2027              // 預設顯示哪一年的流年
+  defaultYear: 2027,             // 預設顯示哪一年的流年
+  lineId: "@123abcde"            // LINE 官方帳號 ID（含 @），留空就不顯示 LINE 按鈕
 };
 ```
+
+填入 `lineId` 後會出現：
+- 右下角常駐的「LINE 管家」按鈕：點了直接加入你的 LINE 官方帳號
+- 結果頁的「用 LINE 問惠姐」按鈕：自動帶入對方的數字基因密碼與流年訊息，方便你接續諮詢
+
+LINE ID 可在 LINE Official Account Manager 的「帳號設定」找到（@ 開頭那串）。
 
 預約按鈕會開啟 IG 私訊，數字的解讀留在一對一諮詢中說明。
 
