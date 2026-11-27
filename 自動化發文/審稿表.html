@@ -13,6 +13,7 @@
   --num-bg:#dcefe2; --num-fg:#2c6b45;
   --pet-bg:#fbe0dc; --pet-fg:#9a3a2c;
   --lead-bg:#a4754f; --lead-fg:#ffffff;
+  --work-bg:#d5eeec; --work-fg:#1d625c; --pair-bg:#f7dbe7; --pair-fg:#8c2d58; --money-bg:#f1ebc2; --money-fg:#6b5c10;
   --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
   --f-head:"Noto Serif TC","PMingLiU",serif;
 }
@@ -20,18 +21,21 @@
   --bg:#1f1a17; --surface:#2a231f; --line:#3d332d; --fg:#efe6de; --muted:#a8978a;
   --accent:#d09e75; --accent-ink:#1f1a17; --ok:#7fc39b; --ok-bg:#22352a; --edit:#e8a06c; --edit-bg:#3a2a1f; --chip:#362d27;
   --job-bg:#1f3247; --job-fg:#a9c8ec; --grow-bg:#3a2840; --grow-fg:#dbb6e8; --luck-bg:#3e2e1c; --luck-fg:#f0c58e;
-  --num-bg:#1f3528; --num-fg:#9fd6b2; --pet-bg:#3f2420; --pet-fg:#f0aea2; --lead-bg:#d09e75; --lead-fg:#1f1a17; color-scheme:dark}}
+  --num-bg:#1f3528; --num-fg:#9fd6b2; --pet-bg:#3f2420; --pet-fg:#f0aea2; --lead-bg:#d09e75; --lead-fg:#1f1a17; --work-bg:#1b3533; --work-fg:#93d6cf; --pair-bg:#3d2230; --pair-fg:#f0aecb; --money-bg:#35311a; --money-fg:#e3d58a; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#1f1a17; --surface:#2a231f; --line:#3d332d; --fg:#efe6de; --muted:#a8978a;
   --accent:#d09e75; --accent-ink:#1f1a17; --ok:#7fc39b; --ok-bg:#22352a; --edit:#e8a06c; --edit-bg:#3a2a1f; --chip:#362d27;
   --job-bg:#1f3247; --job-fg:#a9c8ec; --grow-bg:#3a2840; --grow-fg:#dbb6e8; --luck-bg:#3e2e1c; --luck-fg:#f0c58e;
-  --num-bg:#1f3528; --num-fg:#9fd6b2; --pet-bg:#3f2420; --pet-fg:#f0aea2; --lead-bg:#d09e75; --lead-fg:#1f1a17; color-scheme:dark}
+  --num-bg:#1f3528; --num-fg:#9fd6b2; --pet-bg:#3f2420; --pet-fg:#f0aea2; --lead-bg:#d09e75; --lead-fg:#1f1a17; --work-bg:#1b3533; --work-fg:#93d6cf; --pair-bg:#3d2230; --pair-fg:#f0aecb; --money-bg:#35311a; --money-fg:#e3d58a; color-scheme:dark}
 *{box-sizing:border-box}
 .t-job{background:var(--job-bg);color:var(--job-fg)}
 .t-grow{background:var(--grow-bg);color:var(--grow-fg)}
 .t-luck{background:var(--luck-bg);color:var(--luck-fg)}
 .t-num{background:var(--num-bg);color:var(--num-fg)}
 .t-pet{background:var(--pet-bg);color:var(--pet-fg)}
+.t-work{background:var(--work-bg);color:var(--work-fg)}
+.t-pair{background:var(--pair-bg);color:var(--pair-fg)}
+.t-money{background:var(--money-bg);color:var(--money-fg)}
 .t-lead{background:var(--lead-bg);color:var(--lead-fg)}
 .legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .legend span{font-size:13px;padding:3px 10px;border-radius:6px}
@@ -180,7 +184,7 @@ function cellWhen(r){
   const td = el("td","when"); const f = fmt(r.due);
   td.append(f.time); td.append(el("small",null,f.date)); return td;
 }
-const TYPES = [["職場","job"],["女性成長","grow"],["好命女人","luck"],["生命靈數","num"],["寵物","pet"],["引流","lead"]];
+const TYPES = [["職場","job"],["女性成長","grow"],["生命靈數","num"],["夫妻相處","pair"],["上班族","work"],["好命女人","luck"],["寵物","pet"],["退休理財","money"],["引流","lead"]];
 const TKEY = Object.fromEntries(TYPES);
 const SLOTS = ["08:00","12:30","18:00","20:00","22:30"];
 function tpe(d){ const t = new Date(new Date(d).getTime()+8*3600*1000); return t; }
