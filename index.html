@@ -214,6 +214,7 @@
   .cta h2 { color: var(--accent-ink); }
   .cta p { margin: 8px 0 0; opacity: .92; font-size: 15px; }
   .cta .btn { margin-top: 18px; text-decoration: none; }
+  .cta .btn + .btn { margin-top: 10px; }
   .cta .ghost {
     display: block; width: 100%;
     margin-top: 10px;
@@ -297,6 +298,7 @@
       <h2>想知道你的數字代表什麼？</h2>
       <p id="ctaText"></p>
       <a class="btn" id="ctaLink" href="#" target="_blank" rel="noopener">私訊我「流年」預約諮詢</a>
+      <a class="btn" id="ctaLink2" href="#" target="_blank" rel="noopener">私訊我「天賦」看你的職場天賦</a>
       <button class="ghost" type="button" id="shareBtn">分享給同事朋友</button>
     </section>
 
@@ -411,6 +413,7 @@ $("brandName").textContent = CONFIG.brandName;
 $("brandFoot").textContent = "惠姐 @" + CONFIG.igHandle;
 $("yr").textContent = nowY;
 $("ctaLink").href = "https://ig.me/m/" + encodeURIComponent(CONFIG.igHandle);
+$("ctaLink2").href = $("ctaLink").href;
 
 function toast(msg) {
   const t = $("toast"); t.textContent = msg; t.classList.add("show");
