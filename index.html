@@ -190,7 +190,7 @@
   }
   .lead { margin: 14px 0 0; font-size: 16px; }
   .kv { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
-  .kv li { display: grid; grid-template-columns: 4.6em 1fr; gap: 10px; align-items: start; }
+  .kv > li { display: grid; grid-template-columns: 4.6em 1fr; gap: 10px; align-items: start; }
   .kv .k {
     font-size: 13px; font-weight: 700; text-align: center;
     border-radius: 8px; padding: 2px 0;
@@ -244,6 +244,32 @@
     opacity: 0; pointer-events: none; transition: opacity .25s;
   }
   .toast.show { opacity: 1; }
+  /* 完整解讀（付費） */
+  .titles { display: grid; gap: 8px; margin: 12px 0 0; }
+  .titles div { background: var(--surface-2); border-radius: 10px; padding: 8px 12px; font-size: 15px; }
+  .titles b { color: var(--accent-ink); }
+  .ghostlines { position: relative; margin: 14px 0 0; display: grid; gap: 8px; filter: blur(4px); opacity: .55; user-select: none; }
+  .ghostlines span { display: block; height: 12px; border-radius: 6px; background: var(--muted); }
+  .price { text-align: center; margin: 18px 0 0; font-size: 15px; }
+  .price b { font-size: 26px; color: var(--accent-ink); font-family: "Noto Serif TC", serif; }
+  .price s { color: var(--muted); margin-left: 6px; }
+  .unlock-row { display: flex; gap: 8px; margin-top: 12px; }
+  .unlock-row input {
+    flex: 1; min-width: 0; font: inherit; font-size: 16px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--ink); background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px;
+  }
+  .unlock-row input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .unlock-row button {
+    font: inherit; font-size: 15px; font-weight: 700; color: var(--surface); background: var(--ink);
+    border: 0; border-radius: 12px; padding: 0 16px; cursor: pointer;
+  }
+  .steps { margin: 14px 0 0; padding-left: 1.4em; font-size: 14px; color: var(--muted); }
+  .rsec + .rsec { margin-top: 22px; padding-top: 20px; border-top: 1px dashed var(--line); }
+  .verdict { display: inline-block; margin-left: 6px; font-size: 13px; font-weight: 700; vertical-align: middle; border-radius: 999px; padding: 1px 10px; background: var(--accent); color: #ffffff; }
+  .dolist { margin: 0; padding-left: 1.2em; }
+  .combo { margin: 22px 0 0; padding: 14px; border-radius: 12px; background: var(--deep); color: var(--on-deep); font-size: 15px; text-align: center; }
+  .combo b { color: var(--accent-ink); }
+  #paid[hidden], #locked[hidden] { display: none; }
   @media (min-width: 600px) { .hero h1 { font-size: 36px; } }
 </style>
 </head>
@@ -293,8 +319,35 @@
       <p class="calc" id="pyCalc"></p>
     </section>
 
+    <section class="card" id="reading" aria-labelledby="reading-title">
+      <div class="kicker">完整解讀</div>
+      <h2 id="reading-title" class="serif">你的職場天賦 × 流年策略</h2>
+
+      <div id="locked">
+        <div class="titles">
+          <div>數字基因密碼 <b id="tLp"></b></div>
+          <div id="tPyWrap"><span id="tPyYear"></span> 流年 <b id="tPy"></b></div>
+        </div>
+        <div class="ghostlines" aria-hidden="true">
+          <span style="width:92%"></span><span style="width:78%"></span><span style="width:86%"></span>
+          <span style="width:64%"></span><span style="width:90%"></span><span style="width:70%"></span>
+        </div>
+        <p class="note">解鎖後立即看到：你的天賦與優勢、職場盲點、適合的角色、今年該做與該避免的事，以及惠姐給你的一句提醒。</p>
+        <p class="price">只要 <b id="price"></b><s id="priceOrig"></s></p>
+        <a class="btn" id="payLink" href="#" target="_blank" rel="noopener">付款解鎖完整解讀</a>
+        <ol class="steps" id="paySteps"></ol>
+        <div class="unlock-row">
+          <input id="code" type="text" inputmode="latin" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="輸入解鎖碼" aria-label="解鎖碼">
+          <button type="button" id="unlockBtn">解鎖</button>
+        </div>
+        <p class="err" id="codeErr" role="alert"></p>
+      </div>
+
+      <div id="paid" hidden></div>
+    </section>
+
     <section class="card cta">
-      <h2>想知道你的數字代表什麼？</h2>
+      <h2>想要一對一深入解讀？</h2>
       <p id="ctaText"></p>
       <a class="btn" id="ctaLink" href="#" target="_blank" rel="noopener">私訊我「流年」預約諮詢</a>
       <button class="ghost" type="button" id="shareBtn">分享給同事朋友</button>
@@ -323,8 +376,15 @@
 const CONFIG = {
   igHandle: "shulibook",           // 你的 IG 帳號（不含 @）
   brandName: "惠姐｜職場成長與數字基因密碼",// 你的品牌名稱
-  defaultYear: 2027                 // 預設顯示哪一年的流年
+  defaultYear: 2027,                // 預設顯示哪一年的流年
+  price: 299,                       // 完整解讀價格（新台幣）
+  priceOrig: 599,                   // 劃掉的原價，不想顯示就填 0
+  payUrl: ""                        // 付款連結（綠界、LINE Pay、Portaly 等）。留空＝改為私訊 IG 付款
 };
+
+/* 免費顯示的稱號（當作吸引解鎖的預告） */
+const LP_TITLES = { 1: "開創型領導者", 2: "協調型夥伴", 3: "表達型創意人", 4: "穩健型執行者", 5: "自由型開拓者", 6: "照顧型守護者", 7: "洞察型專家", 8: "成就型掌權者", 9: "理想型影響者" };
+const PY_TITLES = { 1: "播種開創年", 2: "合作等待年", 3: "表達曝光年", 4: "打底扎根年", 5: "變動轉折年", 6: "責任承擔年", 7: "沉澱進修年", 8: "收成加薪年", 9: "結束整理年" };
 /* ================================== */
 
 const $ = (id) => document.getElementById(id);
@@ -393,7 +453,12 @@ function render() {
   $("pyLabel").textContent = pickYear + " 流年";
   $("lpCalc").textContent = "數字基因密碼：" + lp.text;
   $("pyCalc").textContent = pickYear + " 流年（月＋日＋" + pickYear + "）：" + py.text;
-  $("ctaText").textContent = "數字基因密碼 " + lp.n + " × 流年 " + py.n + "，對你的職場代表什麼？該衝還是該蹲？私訊我「流年」，我幫你一對一解讀。";
+  $("ctaText").textContent = "數字基因密碼 " + lp.n + " × 流年 " + py.n + "，放到你自己的工作、轉職、升遷問題上該怎麼用？私訊我「流年」，我幫你一對一解讀。";
+  current = { lp: lp.n, py: py.n, year: pickYear };
+  $("tLp").textContent = lp.n + " 號｜" + LP_TITLES[lp.n];
+  $("tPyYear").textContent = pickYear;
+  $("tPy").textContent = py.n + "｜" + PY_TITLES[py.n];
+  if (reading) renderReading();
   return true;
 }
 
@@ -411,6 +476,74 @@ $("brandName").textContent = CONFIG.brandName;
 $("brandFoot").textContent = "惠姐 @" + CONFIG.igHandle;
 $("yr").textContent = nowY;
 $("ctaLink").href = "https://ig.me/m/" + encodeURIComponent(CONFIG.igHandle);
+
+/* ====== 付費解鎖 ====== */
+let current = null, reading = null;
+const STORE = "shulibook-unlock";
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const normCode = (c) => String(c).toUpperCase().replace(/[^A-Z0-9]/g, "");
+const unb64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+let lockFile = null;
+
+async function tryUnlock(code) {
+  if (!normCode(code)) return false;
+  try {
+    lockFile = lockFile || await (await fetch("reading.lock", { cache: "no-cache" })).json();
+    const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(normCode(code)), "PBKDF2", false, ["deriveKey"]);
+    const key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt: unb64(lockFile.salt), iterations: lockFile.iter, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+    const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(lockFile.iv) }, key, unb64(lockFile.data));
+    reading = JSON.parse(new TextDecoder().decode(pt));
+  } catch (e) { return false; }
+  try { localStorage.setItem(STORE, code); } catch (e) {}
+  renderReading();
+  return true;
+}
+
+function renderReading() {
+  $("locked").hidden = true;
+  const box = $("paid"); box.hidden = false;
+  if (!current) { box.innerHTML = '<p class="lead">已解鎖 ✦ 在上方輸入生日，就能看到你的完整解讀。</p>'; return; }
+  const L = reading.lp[current.lp], P = reading.py[current.py];
+  const li = (k, v, cls) => '<li><span class="k ' + (cls || "") + '">' + k + "</span><span>" + esc(v) + "</span></li>";
+  box.innerHTML =
+    '<div class="rsec"><div class="kicker">數字基因密碼 ' + current.lp + '</div><h3 class="serif">' + esc(LP_TITLES[current.lp]) + "</h3>" +
+    '<p class="lead">' + esc(L.talent) + '</p><ul class="kv">' +
+    li("職場優勢", L.strengths.join("、"), "good") + li("盲點", L.blind, "warn") + li("適合角色", L.roles) +
+    '</ul><p class="quote"><b>惠姐提醒：</b>' + esc(L.tip) + "</p></div>" +
+    '<div class="rsec"><div class="kicker">' + current.year + " 流年 " + current.py + '</div><h3 class="serif">' + esc(PY_TITLES[current.py]) +
+    '<span class="verdict">今年：' + esc(P.verdict) + '</span></h3><p class="lead">' + esc(P.theme) + '</p><ul class="kv">' +
+    '<li><span class="k good">該做</span><ul class="dolist">' + P.do.map((x) => "<li>" + esc(x) + "</li>").join("") + "</ul></li>" +
+    li("避免", P.avoid, "warn") + '</ul><p class="quote"><b>年度一句話：</b>' + esc(P.line) + "</p></div>" +
+    '<p class="combo"><b>' + esc(LP_TITLES[current.lp]) + "</b> 遇上 <b>" + esc(PY_TITLES[current.py]) + "</b><br>今年用你的「" + esc(L.strengths[0]) + "」去" + esc(P.verdict) + "</p>" +
+    '<p class="note">切換上方年份，就能看到其他年的流年解讀。</p>';
+}
+
+$("price").textContent = "NT$" + CONFIG.price;
+$("priceOrig").textContent = CONFIG.priceOrig ? "NT$" + CONFIG.priceOrig : "";
+const igDm = "https://ig.me/m/" + encodeURIComponent(CONFIG.igHandle);
+$("payLink").href = CONFIG.payUrl || igDm;
+$("payLink").textContent = CONFIG.payUrl ? "付款 NT$" + CONFIG.price + " 解鎖完整解讀" : "私訊我「解鎖」購買完整解讀";
+$("paySteps").innerHTML = CONFIG.payUrl
+  ? "<li>點上方按鈕完成付款</li><li>付款後會收到解鎖碼</li><li>在下方輸入解鎖碼，立即看到完整解讀</li>"
+  : "<li>私訊 IG @" + esc(CONFIG.igHandle) + "「解鎖」</li><li>付款後我會傳解鎖碼給你</li><li>在下方輸入解鎖碼，立即看到完整解讀</li>";
+
+async function onUnlock() {
+  const btn = $("unlockBtn"); btn.disabled = true; $("codeErr").textContent = "";
+  const ok = await tryUnlock($("code").value);
+  btn.disabled = false;
+  if (!ok) $("codeErr").textContent = "解鎖碼不正確，請再確認一次喔！";
+}
+$("unlockBtn").addEventListener("click", onUnlock);
+$("code").addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); onUnlock(); } });
+
+/* 付款後導回網址帶 #unlock=解鎖碼 會自動解鎖；之前解鎖過的手機也會記住 */
+(async () => {
+  const m = location.hash.match(/unlock=([A-Za-z0-9-]+)/);
+  let saved = null; try { saved = localStorage.getItem(STORE); } catch (e) {}
+  const code = m ? m[1] : saved;
+  if (m) history.replaceState(null, "", location.pathname + location.search);
+  if (code && await tryUnlock(code) && m) toast("已解鎖完整解讀 ✦");
+})();
 
 function toast(msg) {
   const t = $("toast"); t.textContent = msg; t.classList.add("show");
