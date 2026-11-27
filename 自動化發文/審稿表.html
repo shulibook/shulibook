@@ -192,7 +192,7 @@ function dayKey(t){ return t.getUTCFullYear()+"-"+(t.getUTCMonth()+1)+"-"+t.getU
 function partsOf(r){
   const t = r.editedText || r.text || "";
   if(!r.editedText && Array.isArray(r.thread) && r.thread.length) return r.thread;
-  const ps = t.split(/【\d\/3】\n?/).map(x=>x.trim()).filter(Boolean);
+  const ps = t.split(/【\d\/\d】\n?/).map(x=>x.trim()).filter(Boolean);
   return ps.length ? ps : [t];
 }
 function statusMark(r){ const on = r.source==="scheduled" || r.scheduled; return on ? "●" : (r.status==="ok" ? "✓" : (r.status==="edit" ? "改" : "待審")); }
