@@ -36,6 +36,8 @@ thead th{font-family:var(--f-head);font-size:17px;padding:8px 0 4px;text-align:c
 thead th small{display:block;font-family:var(--f-body);font-size:12px;color:var(--muted);font-weight:500}
 tbody th{font-size:14px;font-weight:700;color:var(--muted);text-align:right;padding-right:6px;white-space:nowrap;font-variant-numeric:tabular-nums;width:56px}
 .c{border-radius:10px;height:64px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;text-align:center;padding:4px}
+.c{flex-direction:column;gap:2px}
+.c small{font-size:12px;font-weight:500;opacity:.85}
 .job{background:var(--job-bg);color:var(--job-fg)}
 .grow{background:var(--grow-bg);color:var(--grow-fg)}
 .luck{background:var(--luck-bg);color:var(--luck-fg)}
@@ -67,10 +69,10 @@ ul{margin:0;padding-left:20px;display:grid;gap:6px;font-size:14px}
     <table>
       <thead><tr><th></th><th>週一<small>職場日</small></th><th>週二<small>毛孩日</small></th><th>週三<small>職場日</small></th><th>週四<small>毛孩日</small></th><th>週五<small>職場日</small></th><th>週六<small>休息</small></th><th>週日<small>毛孩日</small></th></tr></thead>
       <tbody>
-        <tr><th>08:00</th><td><div class="c job">職場</div></td><td><div class="c grow">女性成長</div></td><td><div class="c job">職場</div></td><td><div class="c num">生命靈數</div></td><td><div class="c job">職場</div></td><td rowspan="5"><div class="c rest">休息<br>不發文</div></td><td><div class="c luck">好命女人</div></td></tr>
-        <tr><th>12:30</th><td><div class="c grow">女性成長</div></td><td><div class="c luck">好命女人</div></td><td><div class="c luck">好命女人</div></td><td><div class="c pet">寵物</div></td><td><div class="c num">生命靈數</div></td><td><div class="c pet">寵物</div></td></tr>
-        <tr><th>18:00</th><td><div class="c num">生命靈數</div></td><td><div class="c pet">寵物</div></td><td><div class="c grow">女性成長</div></td><td><div class="c luck">好命女人</div></td><td><div class="c luck">好命女人</div></td><td><div class="c grow">女性成長</div></td></tr>
-        <tr><th>20:00</th><td><div class="c luck">好命女人</div></td><td><div class="c num">生命靈數</div></td><td><div class="c num">生命靈數</div></td><td><div class="c grow">女性成長</div></td><td><div class="c grow">女性成長</div></td><td><div class="c num">生命靈數</div></td></tr>
+        <tr><th>08:00</th><td><div class="c job">職場</div></td><td><div class="c grow">女性成長<small>自我價值・不內耗</small></div></td><td><div class="c job">職場</div></td><td><div class="c num">生命靈數</div></td><td><div class="c job">職場</div></td><td rowspan="5"><div class="c rest">休息<br>不發文</div></td><td><div class="c luck">好命女人</div></td></tr>
+        <tr><th>12:30</th><td><div class="c grow">女性成長<small>職場不公平待遇</small></div></td><td><div class="c luck">好命女人</div></td><td><div class="c luck">好命女人</div></td><td><div class="c pet">寵物</div></td><td><div class="c num">生命靈數</div></td><td><div class="c pet">寵物</div></td></tr>
+        <tr><th>18:00</th><td><div class="c num">生命靈數</div></td><td><div class="c pet">寵物</div></td><td><div class="c grow">女性成長<small>職場發展的天花板</small></div></td><td><div class="c luck">好命女人</div></td><td><div class="c luck">好命女人</div></td><td><div class="c grow">女性成長<small>照顧自己的生活</small></div></td></tr>
+        <tr><th>20:00</th><td><div class="c luck">好命女人</div></td><td><div class="c num">生命靈數</div></td><td><div class="c num">生命靈數</div></td><td><div class="c grow">女性成長<small>投資自己・學習</small></div></td><td><div class="c grow">女性成長<small>上班族辛酸史</small></div></td><td><div class="c num">生命靈數</div></td></tr>
         <tr><th>21:30</th><td><div class="c lead">引流</div></td><td><div class="c lead">引流</div></td><td><div class="c lead">引流</div></td><td><div class="c lead">引流</div></td><td><div class="c lead">引流</div></td><td><div class="c lead">引流</div></td></tr>
       </tbody>
     </table>
@@ -81,7 +83,7 @@ ul{margin:0;padding-left:20px;display:grid;gap:6px;font-size:14px}
       <h2>主題與內容</h2>
       <div class="leg">
         <span class="sw job">職場</span><p>職場人性、主管心法、離職與第二收入</p><span class="n">週一三五</span>
-        <span class="sw grow">女性成長</span><p>自我價值、減少內耗、投資自己</p><span class="n">每天 1 篇</span>
+        <span class="sw grow">女性成長</span><p>每天換角度：職場不公平待遇、發展天花板、上班族辛酸、自我價值、投資自己</p><span class="n">每天 1 篇</span>
         <span class="sw luck">好命女人</span><p>好命習慣、打扮旺運、說話與界線</p><span class="n">每天 1 篇</span>
         <span class="sw num">生命靈數</span><p>數字基因密碼 1～9 號的天賦與個性</p><span class="n">每天 1 篇</span>
         <span class="sw pet">寵物</span><p>養狗知識與毛孩的陪伴</p><span class="n">週二四日</span>
