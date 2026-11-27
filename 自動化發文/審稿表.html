@@ -7,16 +7,46 @@
   --bg:#f6f1ec; --surface:#fffdfb; --line:#e6dbd0; --fg:#3a2e27; --muted:#8a776a;
   --accent:#a4754f; --accent-ink:#fff; --ok:#3f7d5a; --ok-bg:#e4f1e8; --edit:#b5652e; --edit-bg:#fbeadc;
   --chip:#efe5db;
+  --job-bg:#dbe7f5; --job-fg:#24507f;
+  --grow-bg:#efe0f3; --grow-fg:#6b3a7d;
+  --luck-bg:#fbe6cf; --luck-fg:#8a5212;
+  --num-bg:#dcefe2; --num-fg:#2c6b45;
+  --pet-bg:#fbe0dc; --pet-fg:#9a3a2c;
+  --lead-bg:#a4754f; --lead-fg:#ffffff;
   --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
   --f-head:"Noto Serif TC","PMingLiU",serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#1f1a17; --surface:#2a231f; --line:#3d332d; --fg:#efe6de; --muted:#a8978a;
-  --accent:#d09e75; --accent-ink:#1f1a17; --ok:#7fc39b; --ok-bg:#22352a; --edit:#e8a06c; --edit-bg:#3a2a1f; --chip:#362d27; color-scheme:dark}}
+  --accent:#d09e75; --accent-ink:#1f1a17; --ok:#7fc39b; --ok-bg:#22352a; --edit:#e8a06c; --edit-bg:#3a2a1f; --chip:#362d27;
+  --job-bg:#1f3247; --job-fg:#a9c8ec; --grow-bg:#3a2840; --grow-fg:#dbb6e8; --luck-bg:#3e2e1c; --luck-fg:#f0c58e;
+  --num-bg:#1f3528; --num-fg:#9fd6b2; --pet-bg:#3f2420; --pet-fg:#f0aea2; --lead-bg:#d09e75; --lead-fg:#1f1a17; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#1f1a17; --surface:#2a231f; --line:#3d332d; --fg:#efe6de; --muted:#a8978a;
-  --accent:#d09e75; --accent-ink:#1f1a17; --ok:#7fc39b; --ok-bg:#22352a; --edit:#e8a06c; --edit-bg:#3a2a1f; --chip:#362d27; color-scheme:dark}
+  --accent:#d09e75; --accent-ink:#1f1a17; --ok:#7fc39b; --ok-bg:#22352a; --edit:#e8a06c; --edit-bg:#3a2a1f; --chip:#362d27;
+  --job-bg:#1f3247; --job-fg:#a9c8ec; --grow-bg:#3a2840; --grow-fg:#dbb6e8; --luck-bg:#3e2e1c; --luck-fg:#f0c58e;
+  --num-bg:#1f3528; --num-fg:#9fd6b2; --pet-bg:#3f2420; --pet-fg:#f0aea2; --lead-bg:#d09e75; --lead-fg:#1f1a17; color-scheme:dark}
 *{box-sizing:border-box}
+.t-job{background:var(--job-bg);color:var(--job-fg)}
+.t-grow{background:var(--grow-bg);color:var(--grow-fg)}
+.t-luck{background:var(--luck-bg);color:var(--luck-fg)}
+.t-num{background:var(--num-bg);color:var(--num-fg)}
+.t-pet{background:var(--pet-bg);color:var(--pet-fg)}
+.t-lead{background:var(--lead-bg);color:var(--lead-fg)}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.legend span{font-size:13px;padding:3px 10px;border-radius:6px}
+.calbox{overflow-x:auto;margin-top:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.cal{border-collapse:separate;border-spacing:4px;min-width:100%}
+.cal th,.cal td{border:0;padding:0;vertical-align:top}
+.cal thead th{font-size:12px;color:var(--muted);text-align:center;padding:8px 4px 4px;white-space:nowrap;letter-spacing:0}
+.cal thead th b{display:block;font-size:14px;color:var(--fg);font-variant-numeric:tabular-nums}
+.cal thead th.today b{color:var(--accent)}
+.cal tbody th{font-size:12px;color:var(--muted);font-weight:500;padding:8px 6px 0 8px;white-space:nowrap;font-variant-numeric:tabular-nums;position:sticky;left:0;background:var(--surface);z-index:1}
+.cell{width:118px;min-width:118px;height:92px;border-radius:8px;padding:6px 8px;display:flex;flex-direction:column;gap:2px;overflow:hidden}
+.cell .k{font-size:11px;font-weight:700;display:flex;justify-content:space-between;gap:4px}
+.cell .h{font-size:12px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;opacity:.92}
+.cell.empty{background:transparent;border:1.5px dashed var(--line);color:var(--muted);align-items:center;justify-content:center;font-size:12px}
+.cell.sent{opacity:.55}
 body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.6}
 .wrap{max-width:980px;margin:0 auto;padding-block:28px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:28px}
 h1,h2{font-family:var(--f-head);margin:0;text-wrap:balance}
@@ -36,7 +66,6 @@ tr:last-child td{border-bottom:0}
 td.when{white-space:nowrap;font-variant-numeric:tabular-nums;font-weight:500}
 td.when small{display:block;color:var(--muted);font-weight:400}
 .type{display:inline-block;font-size:12px;padding:2px 8px;border-radius:6px;background:var(--chip);white-space:nowrap}
-.type.引流{background:var(--accent);color:var(--accent-ink)}
 .src{display:block;font-size:11px;color:var(--muted);margin-top:4px;white-space:nowrap}
 .text{white-space:pre-wrap;min-width:240px;max-width:52ch}
 .text .old{color:var(--muted);text-decoration:line-through;display:block;margin-top:8px;font-size:13px}
@@ -76,6 +105,13 @@ textarea{min-height:220px;resize:vertical;line-height:1.6}
     <div class="stats" id="stats"></div>
     <p id="status">讀取中…</p>
   </header>
+
+  <section>
+    <h2>排程總覽</h2>
+    <p class="sub">每格是一則貼文，顏色代表主題。✓ 是已 OK，● 是已在 Buffer 排好，虛線框是還沒有貼文的時段。左右滑動看更多天。</p>
+    <div class="legend" id="legend"></div>
+    <div class="calbox"><table class="cal" id="cal"></table></div>
+  </section>
 
   <section>
     <h2>待審 <span class="count" id="c-pending"></span></h2>
@@ -128,8 +164,49 @@ function cellWhen(r){
   const td = el("td","when"); const f = fmt(r.due);
   td.append(f.time); td.append(el("small",null,f.date)); return td;
 }
+const TYPES = [["職場","job"],["女性成長","grow"],["好命女人","luck"],["生命靈數","num"],["寵物","pet"],["引流","lead"]];
+const TKEY = Object.fromEntries(TYPES);
+const SLOTS = ["08:00","12:30","18:00","20:00","21:30"];
+function tpe(d){ const t = new Date(new Date(d).getTime()+8*3600*1000); return t; }
+function dayKey(t){ return t.getUTCFullYear()+"-"+(t.getUTCMonth()+1)+"-"+t.getUTCDate(); }
+function renderCal(){
+  const lg = document.getElementById("legend"); lg.replaceChildren();
+  TYPES.forEach(([n,k])=>lg.append(el("span","t-"+k,n)));
+  const cal = document.getElementById("cal"); cal.replaceChildren();
+  if(!rows.length) return;
+  const map = {}; let min=null, max=null;
+  rows.forEach(r=>{ const t=tpe(r.due); const k=dayKey(t)+" "+String(t.getUTCHours()).padStart(2,"0")+":"+String(t.getUTCMinutes()).padStart(2,"0");
+    (map[k] ||= []).push(r);
+    const d0 = Date.UTC(t.getUTCFullYear(),t.getUTCMonth(),t.getUTCDate());
+    if(min===null||d0<min) min=d0; if(max===null||d0>max) max=d0; });
+  const days=[]; for(let d=min; d<=max; d+=86400000) days.push(new Date(d));
+  const todayKey = dayKey(tpe(Date.now()));
+  const thead = el("thead"); const hr = el("tr"); hr.append(el("th"));
+  days.forEach(d=>{ const th = el("th", dayKey(d)===todayKey?"today":null); th.append(el("b",null,(d.getUTCMonth()+1)+"/"+d.getUTCDate())); th.append("週"+WD[d.getUTCDay()]); hr.append(th); });
+  thead.append(hr); cal.append(thead);
+  const tb = el("tbody"); const now = Date.now();
+  SLOTS.forEach(s=>{
+    const tr = el("tr"); tr.append(el("th",null,s));
+    days.forEach(d=>{
+      const td = el("td"); const list = map[dayKey(d)+" "+s] || [];
+      if(!list.length){ td.append(el("div","cell empty","空")); }
+      list.forEach(r=>{
+        const c = el("div","cell t-"+(TKEY[r.type]||"job")+(new Date(r.due).getTime()<now?" sent":""));
+        const k = el("div","k"); k.append(el("span",null,r.type));
+        const on = r.source==="scheduled" || r.scheduled;
+        k.append(el("span",null, on ? "●" : (r.status==="ok" ? "✓" : (r.status==="edit" ? "改" : "待審"))));
+        const first = (r.editedText || r.text || "").replace(/【\d\/3】\n?/g,"").split("\n")[0];
+        c.title = r.type+"｜"+first;
+        c.append(k, el("div","h",first)); td.append(c);
+      });
+      tr.append(td);
+    });
+    tb.append(tr);
+  });
+  cal.append(tb);
+}
 function cellType(r){
-  const td = el("td"); td.append(el("span","type "+r.type, r.type));
+  const td = el("td"); td.append(el("span","type t-"+(TKEY[r.type]||"job"), r.type));
   td.append(el("span","src", r.source==="scheduled" ? "Buffer 已排程" : "Buffer 點子"));
   return td;
 }
@@ -173,6 +250,7 @@ function textCell(r, showMemo){
 }
 
 function render(){
+  renderCal();
   const pend = rows.filter(r=>!r.status || r.status==="pending");
   const ed = rows.filter(r=>r.status==="edit");
   const ok = rows.filter(r=>r.status==="ok");
