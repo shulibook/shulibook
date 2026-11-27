@@ -226,6 +226,19 @@
     cursor: pointer;
   }
 
+  /* Enroll */
+  .enroll { border: 2px solid var(--accent); }
+  .enroll .ribbon {
+    display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .1em;
+    color: #ffffff; background: var(--warn); border-radius: 999px; padding: 1px 12px; margin-bottom: 8px;
+  }
+  .enroll h2 { color: var(--accent-ink); }
+  .enroll ul { margin: 12px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+  .enroll li { position: relative; padding-left: 1.6em; font-size: 15px; }
+  .enroll li::before { content: "✦"; position: absolute; left: 0; color: var(--accent); }
+  .enroll .btn { text-decoration: none; text-align: center; }
+  .enroll .note { text-align: center; }
+
   /* About */
   .about { display: flex; gap: 14px; align-items: flex-start; }
   .avatar {
@@ -302,6 +315,15 @@
 
   </div>
 
+  <section class="card enroll" id="enroll" aria-labelledby="enroll-title">
+    <span class="ribbon" id="enrollTag"></span>
+    <h2 id="enroll-title"></h2>
+    <p class="sub" id="enrollSub" style="margin-bottom:0"></p>
+    <ul id="enrollList"></ul>
+    <a class="btn" id="enrollLink" href="#" target="_blank" rel="noopener"></a>
+    <p class="note" id="enrollNote"></p>
+  </section>
+
   <section class="card">
     <div class="about">
       <a href="https://www.instagram.com/shulibook/" target="_blank" rel="noopener"><img class="avatar" src="avatar.jpg" alt="惠姐的大頭照" width="48" height="48"></a>
@@ -323,7 +345,20 @@
 const CONFIG = {
   igHandle: "shulibook",           // 你的 IG 帳號（不含 @）
   brandName: "惠姐｜職場成長與數字基因密碼",// 你的品牌名稱
-  defaultYear: 2027                 // 預設顯示哪一年的流年
+  defaultYear: 2027,                // 預設顯示哪一年的流年
+  enroll: {                         // 招生區塊（show 改成 false 就會隱藏）
+    show: true,
+    tag: "招生中",
+    title: "行動班｜學員招募中",
+    sub: "不只算出數字，更要帶著答案去行動。小班陪跑，幫你把天賦變成下一步。",
+    points: [
+      "看懂自己的數字基因密碼，找到職場天賦",
+      "用流年抓準時機：今年該衝、該轉，還是該蹲",
+      "30 年業務主管實戰經驗，陪你擬定行動計畫"
+    ],
+    button: "私訊我「報名」了解課程",
+    note: "名額有限，額滿即止"
+  }
 };
 /* ================================== */
 
@@ -411,6 +446,19 @@ $("brandName").textContent = CONFIG.brandName;
 $("brandFoot").textContent = "惠姐 @" + CONFIG.igHandle;
 $("yr").textContent = nowY;
 $("ctaLink").href = "https://ig.me/m/" + encodeURIComponent(CONFIG.igHandle);
+
+/* 招生區塊 */
+(function () {
+  const e = CONFIG.enroll;
+  if (!e || !e.show) { $("enroll").remove(); return; }
+  $("enrollTag").textContent = e.tag;
+  $("enroll-title").textContent = e.title;
+  $("enrollSub").textContent = e.sub;
+  e.points.forEach((t) => { const li = document.createElement("li"); li.textContent = t; $("enrollList").appendChild(li); });
+  $("enrollLink").textContent = e.button;
+  $("enrollLink").href = "https://ig.me/m/" + encodeURIComponent(CONFIG.igHandle);
+  $("enrollNote").textContent = e.note;
+})();
 
 function toast(msg) {
   const t = $("toast"); t.textContent = msg; t.classList.add("show");
