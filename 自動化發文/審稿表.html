@@ -129,7 +129,7 @@ textarea{min-height:220px;resize:vertical;line-height:1.6}
 
   <section>
     <h2>排程總覽</h2>
-    <p class="sub">一週一張表，顏色代表主題。點任何一格就能看整篇內容。「已排程」已經放進 Buffer、「已OK」審過了等著排進 Buffer、「待審」還沒審、虛線框 還沒有貼文、斜線 週六休息。</p>
+    <p class="sub">一週一張表，顏色代表主題。點任何一格就能看整篇內容。「已排程」已經放進 Buffer、「已OK」審過了等著排進 Buffer、「待審」還沒審、虛線框 還沒有貼文、斜線 週四休息。</p>
     <div class="legend" id="legend"></div>
     <div class="weeks" id="cal"></div>
     <div class="sheet" id="sheet" hidden></div>
@@ -244,11 +244,13 @@ function renderCal(){
     days.forEach(d=>{ const h = el("th", dayKey(d)===todayKey?"today":null); h.append(el("b",null,(d.getUTCMonth()+1)+"/"+d.getUTCDate())); h.append("週"+WD[d.getUTCDay()]); hr.append(h); });
     th.append(hr); tb.append(th);
     const body = el("tbody");
-    SLOTS.forEach(s=>{
+    const extra = new Set(); days.forEach(d=>Object.keys(map).forEach(k=>{ const [dk,t]=k.split(" "); if(dk===dayKey(d) && !SLOTS.includes(t)) extra.add(t); }));
+    const WS = SLOTS.concat([...extra]).sort();
+    WS.forEach(s=>{
       const tr = el("tr"); tr.append(el("th",null,s));
       days.forEach(d=>{
         const td = el("td");
-        if(d.getUTCDay()===6){ td.append(el("div","cell rest","休息")); tr.append(td); return; }
+        if(d.getUTCDay()===4){ td.append(el("div","cell rest","休息")); tr.append(td); return; }
         const list = map[dayKey(d)+" "+s] || [];
         if(!list.length) td.append(el("div","cell empty","空"));
         list.forEach(r=>td.append(mkCell(r)));
@@ -259,9 +261,9 @@ function renderCal(){
     tb.append(body); box.append(tb);
     const dl = el("div","daylist");
     days.forEach(d=>{
-      if(d.getUTCDay()===6) return;
+      if(d.getUTCDay()===4) return;
       const day = el("div","day"); day.append(el("h4",null,(d.getUTCMonth()+1)+"/"+d.getUTCDate()+" 週"+WD[d.getUTCDay()]));
-      SLOTS.forEach(s=>{ const list = map[dayKey(d)+" "+s] || [];
+      WS.forEach(s=>{ const list = map[dayKey(d)+" "+s] || [];
         if(!list.length){ const e=el("div","cell empty",s+"　空"); e.style.height="40px"; day.append(e); }
         list.forEach(r=>{ const c=mkCell(r); c.querySelector(".k span").textContent = s+"　"+r.type; day.append(c); }); });
       dl.append(day);
@@ -272,7 +274,7 @@ function renderCal(){
 }
 function cellType(r){
   const td = el("td"); td.append(el("span","type t-"+(TKEY[r.type]||"job"), r.type));
-  td.append(el("span","src", r.source==="scheduled" ? "Buffer 已排程" : "Buffer 點子"));
+  td.append(el("span","src", r.source==="extra" ? "其他對話排的" : (r.source==="scheduled" || r.scheduled ? "Buffer 已排程" : "等待排程")));
   return td;
 }
 function currentText(r){ return r.editedText || r.text; }
