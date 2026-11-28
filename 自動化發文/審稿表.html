@@ -1,0 +1,377 @@
+<title>惠姐貼文審稿表</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap">
+<style>
+/* Layout: one review column; pending table on top, then 修改 and OK lists below */
+:root{
+  --bg:#f6f1ec; --surface:#fffdfb; --line:#e6dbd0; --fg:#3a2e27; --muted:#8a776a;
+  --accent:#a4754f; --accent-ink:#fff; --ok:#3f7d5a; --ok-bg:#e4f1e8; --edit:#b5652e; --edit-bg:#fbeadc;
+  --chip:#efe5db;
+  --job-bg:#dbe7f5; --job-fg:#24507f;
+  --grow-bg:#efe0f3; --grow-fg:#6b3a7d;
+  --luck-bg:#fbe6cf; --luck-fg:#8a5212;
+  --num-bg:#dcefe2; --num-fg:#2c6b45;
+  --pet-bg:#fbe0dc; --pet-fg:#9a3a2c;
+  --lead-bg:#a4754f; --lead-fg:#ffffff;
+  --work-bg:#d5eeec; --work-fg:#1d625c; --pair-bg:#f7dbe7; --pair-fg:#8c2d58; --money-bg:#f1ebc2; --money-fg:#6b5c10;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --f-head:"Noto Serif TC","PMingLiU",serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1f1a17; --surface:#2a231f; --line:#3d332d; --fg:#efe6de; --muted:#a8978a;
+  --accent:#d09e75; --accent-ink:#1f1a17; --ok:#7fc39b; --ok-bg:#22352a; --edit:#e8a06c; --edit-bg:#3a2a1f; --chip:#362d27;
+  --job-bg:#1f3247; --job-fg:#a9c8ec; --grow-bg:#3a2840; --grow-fg:#dbb6e8; --luck-bg:#3e2e1c; --luck-fg:#f0c58e;
+  --num-bg:#1f3528; --num-fg:#9fd6b2; --pet-bg:#3f2420; --pet-fg:#f0aea2; --lead-bg:#d09e75; --lead-fg:#1f1a17; --work-bg:#1b3533; --work-fg:#93d6cf; --pair-bg:#3d2230; --pair-fg:#f0aecb; --money-bg:#35311a; --money-fg:#e3d58a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1f1a17; --surface:#2a231f; --line:#3d332d; --fg:#efe6de; --muted:#a8978a;
+  --accent:#d09e75; --accent-ink:#1f1a17; --ok:#7fc39b; --ok-bg:#22352a; --edit:#e8a06c; --edit-bg:#3a2a1f; --chip:#362d27;
+  --job-bg:#1f3247; --job-fg:#a9c8ec; --grow-bg:#3a2840; --grow-fg:#dbb6e8; --luck-bg:#3e2e1c; --luck-fg:#f0c58e;
+  --num-bg:#1f3528; --num-fg:#9fd6b2; --pet-bg:#3f2420; --pet-fg:#f0aea2; --lead-bg:#d09e75; --lead-fg:#1f1a17; --work-bg:#1b3533; --work-fg:#93d6cf; --pair-bg:#3d2230; --pair-fg:#f0aecb; --money-bg:#35311a; --money-fg:#e3d58a; color-scheme:dark}
+*{box-sizing:border-box}
+.t-job{background:var(--job-bg);color:var(--job-fg)}
+.t-grow{background:var(--grow-bg);color:var(--grow-fg)}
+.t-luck{background:var(--luck-bg);color:var(--luck-fg)}
+.t-num{background:var(--num-bg);color:var(--num-fg)}
+.t-pet{background:var(--pet-bg);color:var(--pet-fg)}
+.t-work{background:var(--work-bg);color:var(--work-fg)}
+.t-pair{background:var(--pair-bg);color:var(--pair-fg)}
+.t-money{background:var(--money-bg);color:var(--money-fg)}
+.t-lead{background:var(--lead-bg);color:var(--lead-fg)}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.legend span{font-size:13px;padding:3px 10px;border-radius:6px}
+.weeks{display:grid;gap:18px;margin-top:12px}
+.week{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px}
+.week h3{margin:2px 4px 8px;font-size:15px;font-family:var(--f-head)}
+.wk{width:100%;border-collapse:separate;border-spacing:4px;table-layout:fixed}
+.wk th,.wk td{border:0;padding:0;vertical-align:top}
+.wk thead th{font-size:12px;color:var(--muted);text-align:center;padding:2px 0 4px;font-weight:500;letter-spacing:0}
+.wk thead th b{display:block;font-size:14px;color:var(--fg);font-variant-numeric:tabular-nums}
+.wk thead th.today b{color:var(--accent)}
+.wk tbody th{width:46px;font-size:12px;color:var(--muted);font-weight:500;padding-top:8px;font-variant-numeric:tabular-nums;text-align:left}
+.cell{height:104px;border-radius:8px;padding:6px 7px;display:flex;flex-direction:column;gap:2px;overflow:hidden;cursor:pointer;border:0;width:100%;text-align:left;font:inherit}
+.cell .k{font-size:11px;font-weight:700;display:flex;justify-content:space-between;gap:4px;white-space:nowrap;letter-spacing:-.02em}
+.cell .k span:first-child{overflow:hidden;text-overflow:clip}
+.cell .k span:last-child{flex:none}
+.cell .a{font-size:10px;opacity:.85}
+.cell .h{font-size:12px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;opacity:.95}
+.cell.empty{background:transparent;border:1.5px dashed var(--line);color:var(--muted);align-items:center;justify-content:center;font-size:12px;cursor:default}
+.cell.rest{background:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 9px);color:var(--muted);align-items:center;justify-content:center;font-size:12px;cursor:default}
+.cell.sent{opacity:.55}
+.daylist{display:none}
+.day{display:grid;gap:6px;margin-bottom:12px}
+.day h4{margin:0;font-size:14px}
+.day .cell{height:auto;min-height:0}
+.day .cell .h{-webkit-line-clamp:2}
+@media (max-width:720px){ .wk{display:none} .daylist{display:block} }
+.sheet{position:fixed;inset:auto 0 0 0;max-height:82vh;overflow:auto;background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -8px 30px rgba(0,0,0,.18);padding:16px max(16px,env(safe-area-inset-left,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-right,0px));z-index:20;display:grid;gap:10px}
+.sheet .hd{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.sheet .part{white-space:pre-wrap;background:var(--bg);border-radius:10px;padding:10px 12px;font-size:15px;line-height:1.7}
+.sheet .part b{display:block;font-size:12px;color:var(--muted);margin-bottom:2px}
+.sheet .btns{display:flex;gap:8px;flex-wrap:wrap}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.6}
+.wrap{max-width:980px;margin:0 auto;padding-block:28px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:28px}
+h1,h2{font-family:var(--f-head);margin:0;text-wrap:balance}
+h1{font-size:26px}
+h2{font-size:19px;display:flex;align-items:center;gap:10px}
+.sub{color:var(--muted);margin:6px 0 0}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.stat{background:var(--chip);border-radius:999px;padding:4px 12px;font-size:13px;font-variant-numeric:tabular-nums}
+.stat b{font-weight:700}
+.note{font-size:13px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.count{font-family:var(--f-body);font-size:13px;font-weight:500;color:var(--muted)}
+.tablebox{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;vertical-align:top;padding:12px 14px;border-bottom:1px solid var(--line)}
+th{font-size:12px;letter-spacing:.06em;color:var(--muted);font-weight:500;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.when{white-space:nowrap;font-variant-numeric:tabular-nums;font-weight:500}
+td.when small{display:block;color:var(--muted);font-weight:400}
+.type{display:inline-block;font-size:12px;padding:2px 8px;border-radius:6px;background:var(--chip);white-space:nowrap}
+.src{display:block;font-size:11px;color:var(--muted);margin-top:4px;white-space:nowrap}
+.text{white-space:pre-wrap;min-width:240px;max-width:52ch}
+.text .old{color:var(--muted);text-decoration:line-through;display:block;margin-top:8px;font-size:13px}
+.memo{display:block;margin-top:8px;font-size:13px;color:var(--edit)}
+.acts{display:flex;flex-direction:column;gap:6px;white-space:nowrap}
+button{font:inherit;font-size:14px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:6px 14px;cursor:pointer}
+button:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button.ok{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+button.edit{color:var(--edit);border-color:var(--edit)}
+button.ghost{font-size:13px;padding:4px 10px;color:var(--muted)}
+button:disabled{opacity:.5;cursor:default}
+.editor{display:grid;gap:8px;margin-top:4px}
+textarea,input[type=text]{width:100%;font:inherit;font-size:14px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+textarea{min-height:220px;resize:vertical;line-height:1.6}
+.editor .row{display:flex;gap:8px;flex-wrap:wrap}
+.len{font-size:12px;color:var(--muted)}
+.len.over{color:var(--edit)}
+.pill{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}
+.pill.edit{background:var(--edit-bg);color:var(--edit)}
+.empty{padding:22px;text-align:center;color:var(--muted)}
+#status{font-size:13px;color:var(--muted)}
+@media (max-width:640px){
+  .tablebox thead{display:none}
+  .tablebox table,.tablebox tbody,.tablebox tr,.tablebox td{display:block;width:100%}
+  .tablebox tr{border-bottom:1px solid var(--line);padding:12px 0}
+  .tablebox td{border:0;padding:4px 14px}
+  .text{min-width:0;max-width:none}
+  .acts{flex-direction:row;flex-wrap:wrap}
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>惠姐貼文審稿表</h1>
+    <p class="sub">Threads @shulibook・每則按「OK」或「修改」。OK 的貼文會由每日任務排進 Buffer；修改的我會照你的意見改好再給你看。</p>
+    <div class="stats" id="stats"></div>
+    <p id="status">讀取中…</p>
+  </header>
+
+  <section>
+    <h2>排程總覽</h2>
+    <p class="sub">一週一張表，顏色代表主題。點任何一格就能看整篇內容。「已排程」已經放進 Buffer、「已OK」審過了等著排進 Buffer、「待審」還沒審、虛線框 還沒有貼文、斜線 週四休息。</p>
+    <div class="legend" id="legend"></div>
+    <div class="weeks" id="cal"></div>
+    <div class="sheet" id="sheet" hidden></div>
+  </section>
+
+  <section>
+    <h2>待審 <span class="count" id="c-pending"></span></h2>
+    <div class="tablebox" style="margin-top:12px">
+      <table>
+        <thead><tr><th>發文時間</th><th>類型</th><th>內容</th><th>審核</th></tr></thead>
+        <tbody id="t-pending"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>修改 <span class="count" id="c-edit"></span></h2>
+    <div class="tablebox" style="margin-top:12px">
+      <table>
+        <thead><tr><th>發文時間</th><th>類型</th><th>內容與意見</th><th></th></tr></thead>
+        <tbody id="t-edit"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>OK・上排程 <span class="count" id="c-ok"></span></h2>
+    <div class="tablebox" style="margin-top:12px">
+      <table>
+        <thead><tr><th>發文時間</th><th>類型</th><th>內容</th><th>排程狀態</th></tr></thead>
+        <tbody id="t-ok"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <p class="note">審完跟 Claude 說一聲「審好了」，就會把 OK 的上排程、把修改的改好。Buffer 免費方案同時最多排 10 則，OK 的貼文會依時間順序陸續排進去。</p>
+</div>
+
+<script>
+const WD = ["日","一","二","三","四","五","六"];
+let db = null, rows = [], editing = null, drafts = {};
+
+function fmt(due){
+  const d = new Date(due);
+  const t = new Date(d.getTime() + 8*3600*1000); // Asia/Taipei
+  const mm = String(t.getUTCMonth()+1), dd = String(t.getUTCDate());
+  const hh = String(t.getUTCHours()).padStart(2,"0"), mi = String(t.getUTCMinutes()).padStart(2,"0");
+  return {date: mm+"/"+dd+"（"+WD[t.getUTCDay()]+"）", time: hh+":"+mi};
+}
+function el(tag, cls, text){ const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
+function btn(label, cls, fn){ const b=el("button",cls,label); b.type="button"; b.addEventListener("click",fn); return b; }
+
+function cellWhen(r){
+  const td = el("td","when"); const f = fmt(r.due);
+  td.append(f.time); td.append(el("small",null,f.date)); return td;
+}
+const TYPES = [["職場","job"],["女性成長","grow"],["數字基因密碼","num"],["夫妻相處","pair"],["上班族","work"],["好命女人","luck"],["寵物","pet"],["退休理財","money"],["引流","lead"]];
+const TKEY = Object.fromEntries(TYPES);
+const SLOTS = ["08:00","12:30","18:00","20:00","22:30"];
+function tpe(d){ const t = new Date(new Date(d).getTime()+8*3600*1000); return t; }
+function dayKey(t){ return t.getUTCFullYear()+"-"+(t.getUTCMonth()+1)+"-"+t.getUTCDate(); }
+function partsOf(r){
+  const t = r.editedText || r.text || "";
+  if(!r.editedText && Array.isArray(r.thread) && r.thread.length) return r.thread;
+  const ps = t.split(/【\d\/\d】\n?/).map(x=>x.trim()).filter(Boolean);
+  return ps.length ? ps : [t];
+}
+function statusMark(r){ const on = r.source==="scheduled" || r.scheduled; return on ? "已排程" : (r.status==="ok" ? "已OK" : (r.status==="edit" ? "改" : "待審")); }
+function mkCell(r){
+  const c = el("button","cell t-"+(TKEY[r.type]||"job")+(new Date(r.due).getTime()<Date.now()?" sent":""));
+  c.type="button";
+  const k = el("div","k"); k.append(el("span",null,r.type), el("span",null,statusMark(r)));
+  c.append(k);
+  if(r.angle) c.append(el("div","a",r.angle));
+  c.append(el("div","h",partsOf(r)[0].split("\n")[0]));
+  c.addEventListener("click",()=>openSheet(r.id));
+  return c;
+}
+function openSheet(id){
+  const r = rows.find(x=>x.id===id); const sh = document.getElementById("sheet"); if(!r){ sh.hidden=true; return; }
+  sh.replaceChildren();
+  const f = fmt(r.due); const hd = el("div","hd");
+  const tl = el("div"); tl.append(el("span","type t-"+(TKEY[r.type]||"job"), r.type)); tl.append(" "+f.date+" "+f.time+(r.angle?"｜"+r.angle:""));
+  hd.append(tl, btn("關閉","ghost",()=>{ sh.hidden=true; }));
+  sh.append(hd);
+  partsOf(r).forEach((p,i,arr)=>{ const d=el("div","part"); d.append(el("b",null,(i+1)+"/"+arr.length)); d.append(p); sh.append(d); });
+  if(r.note) sh.append(el("span","memo","意見："+r.note));
+  const bs = el("div","btns");
+  bs.append(el("span","pill "+(r.status==="ok"?"ok":"edit"), statusMark(r)==="已排程"?"已在 Buffer 排好":(r.status==="ok"?"已 OK":(r.status==="edit"?"待修改":"待審"))));
+  if(r.status!=="ok") bs.append(btn("OK","ok",()=>{ save(r.id,{status:"ok"}); sh.hidden=true; }));
+  bs.append(btn("修改","edit",()=>{ sh.hidden=true; editing=r.id; render(); setTimeout(()=>{ const ta=document.getElementById("ta-"+r.id); if(ta){ ta.scrollIntoView({block:"center"}); ta.focus(); } },50); }));
+  sh.append(bs); sh.hidden=false;
+}
+function renderCal(){
+  const lg = document.getElementById("legend"); lg.replaceChildren();
+  TYPES.forEach(([n,k])=>lg.append(el("span","t-"+k,n)));
+  const cal = document.getElementById("cal"); cal.replaceChildren();
+  if(!rows.length) return;
+  const map = {}; let min=null, max=null;
+  rows.forEach(r=>{ const t=tpe(r.due); const k=dayKey(t)+" "+String(t.getUTCHours()).padStart(2,"0")+":"+String(t.getUTCMinutes()).padStart(2,"0");
+    (map[k] ||= []).push(r);
+    const d0 = Date.UTC(t.getUTCFullYear(),t.getUTCMonth(),t.getUTCDate());
+    if(min===null||d0<min) min=d0; if(max===null||d0>max) max=d0; });
+  let start = new Date(min); start = new Date(start.getTime() - ((start.getUTCDay()+6)%7)*86400000);
+  const todayKey = dayKey(tpe(Date.now()));
+  for(let w=start.getTime(); w<=max; w+=7*86400000){
+    const days=[]; for(let i=0;i<7;i++) days.push(new Date(w+i*86400000));
+    const box = el("div","week");
+    const d0=days[0], d6=days[6];
+    box.append(el("h3",null,(d0.getUTCMonth()+1)+"/"+d0.getUTCDate()+"（一）～ "+(d6.getUTCMonth()+1)+"/"+d6.getUTCDate()+"（日）"));
+    const tb = el("table","wk"); const th = el("thead"); const hr = el("tr"); hr.append(el("th"));
+    days.forEach(d=>{ const h = el("th", dayKey(d)===todayKey?"today":null); h.append(el("b",null,(d.getUTCMonth()+1)+"/"+d.getUTCDate())); h.append("週"+WD[d.getUTCDay()]); hr.append(h); });
+    th.append(hr); tb.append(th);
+    const body = el("tbody");
+    const extra = new Set(); days.forEach(d=>Object.keys(map).forEach(k=>{ const [dk,t]=k.split(" "); if(dk===dayKey(d) && !SLOTS.includes(t)) extra.add(t); }));
+    const WS = SLOTS.concat([...extra]).sort();
+    WS.forEach(s=>{
+      const tr = el("tr"); tr.append(el("th",null,s));
+      days.forEach(d=>{
+        const td = el("td");
+        if(d.getUTCDay()===4){ td.append(el("div","cell rest","休息")); tr.append(td); return; }
+        const list = map[dayKey(d)+" "+s] || [];
+        if(!list.length) td.append(el("div","cell empty","空"));
+        list.forEach(r=>td.append(mkCell(r)));
+        tr.append(td);
+      });
+      body.append(tr);
+    });
+    tb.append(body); box.append(tb);
+    const dl = el("div","daylist");
+    days.forEach(d=>{
+      if(d.getUTCDay()===4) return;
+      const day = el("div","day"); day.append(el("h4",null,(d.getUTCMonth()+1)+"/"+d.getUTCDate()+" 週"+WD[d.getUTCDay()]));
+      WS.forEach(s=>{ const list = map[dayKey(d)+" "+s] || [];
+        if(!list.length){ const e=el("div","cell empty",s+"　空"); e.style.height="40px"; day.append(e); }
+        list.forEach(r=>{ const c=mkCell(r); c.querySelector(".k span").textContent = s+"　"+r.type; day.append(c); }); });
+      dl.append(day);
+    });
+    box.append(dl);
+    cal.append(box);
+  }
+}
+function cellType(r){
+  const td = el("td"); td.append(el("span","type t-"+(TKEY[r.type]||"job"), r.type));
+  td.append(el("span","src", r.source==="extra" ? "其他對話排的" : (r.source==="scheduled" || r.scheduled ? "Buffer 已排程" : "等待排程")));
+  return td;
+}
+function currentText(r){ return r.editedText || r.text; }
+
+async function save(id, patch){
+  if(!db){ setStatus("目前無法儲存，請重新整理頁面再試。"); return; }
+  try{
+    await db.collection("posts").doc(id).update(Object.assign({updatedAt: new Date().toISOString()}, patch));
+    setStatus("已儲存");
+  }catch(e){ setStatus("儲存失敗："+(e && e.message ? e.message : "請稍後再試")); }
+}
+function setStatus(s){ document.getElementById("status").textContent = s; }
+
+function editorCell(r){
+  const td = el("td","text");
+  const box = el("div","editor");
+  const ta = el("textarea"); ta.id = "ta-"+r.id;
+  ta.value = drafts[r.id]?.text ?? currentText(r);
+  const len = el("span","len");
+  const upd = ()=>{ const n=[...ta.value].length; len.textContent = n+" / 500 字"; len.className = "len"+(n>500?" over":""); drafts[r.id]=Object.assign(drafts[r.id]||{}, {text: ta.value}); };
+  ta.addEventListener("input", upd); upd();
+  const memo = el("input"); memo.type="text"; memo.id="memo-"+r.id; memo.placeholder="修改意見（選填）：例如「語氣再溫柔一點」「換成我自己的故事」";
+  memo.value = drafts[r.id]?.note ?? (r.note || "");
+  memo.addEventListener("input", ()=>{ drafts[r.id]=Object.assign(drafts[r.id]||{}, {note: memo.value}); });
+  const row = el("div","row");
+  row.append(
+    btn("儲存到「修改」","edit",()=>{ const t=ta.value.trim(); const changed = t && t!==r.text; editing=null; delete drafts[r.id];
+      save(r.id,{status:"edit", editedText: changed ? t : "", note: memo.value.trim()}); }),
+    btn("直接 OK（用這版）","ok",()=>{ const t=ta.value.trim(); const changed = t && t!==r.text; editing=null; delete drafts[r.id];
+      save(r.id,{status:"ok", editedText: changed ? t : "", note: ""}); }),
+    btn("取消","ghost",()=>{ editing=null; delete drafts[r.id]; render(); })
+  );
+  box.append(ta, len, memo, row); td.append(box); return td;
+}
+function textCell(r, showMemo){
+  const td = el("td","text"); td.append(currentText(r));
+  if(r.editedText) td.append(el("span","old","原文：" + r.text.split("\n")[0] + "…"));
+  if(showMemo && r.note) td.append(el("span","memo","意見：" + r.note));
+  return td;
+}
+
+function render(){
+  renderCal();
+  const pend = rows.filter(r=>!r.status || r.status==="pending");
+  const ed = rows.filter(r=>r.status==="edit");
+  const ok = rows.filter(r=>r.status==="ok");
+  document.getElementById("c-pending").textContent = pend.length+" 則";
+  document.getElementById("c-edit").textContent = ed.length+" 則";
+  document.getElementById("c-ok").textContent = ok.length+" 則";
+  const st = document.getElementById("stats"); st.replaceChildren();
+  const add=(k,v)=>{ const s=el("span","stat"); s.append(k+" "); s.append(el("b",null,String(v))); st.append(s); };
+  add("全部", rows.length); add("待審", pend.length); add("修改", ed.length); add("OK", ok.length);
+  add("已在 Buffer 排程", rows.filter(r=>r.source==="scheduled" || r.scheduled).length);
+
+  const fill = (id, list, mk, emptyMsg)=>{
+    const tb = document.getElementById(id); tb.replaceChildren();
+    if(!list.length){ const tr=el("tr"); const td=el("td","empty",emptyMsg); td.colSpan=4; tr.append(td); tb.append(tr); return; }
+    list.forEach(r=>tb.append(mk(r)));
+  };
+  fill("t-pending", pend, r=>{
+    const tr = el("tr"); tr.append(cellWhen(r), cellType(r));
+    if(editing===r.id){ tr.append(editorCell(r), el("td")); return tr; }
+    tr.append(textCell(r,false));
+    const td = el("td"); const a = el("div","acts");
+    a.append(btn("OK","ok",()=>save(r.id,{status:"ok"})), btn("修改","edit",()=>{ editing=r.id; render(); document.getElementById("ta-"+r.id)?.focus(); }));
+    td.append(a); tr.append(td); return tr;
+  }, "全部審完了 👍");
+  fill("t-edit", ed, r=>{
+    const tr = el("tr"); tr.append(cellWhen(r), cellType(r));
+    if(editing===r.id){ tr.append(editorCell(r), el("td")); return tr; }
+    tr.append(textCell(r,true));
+    const td = el("td"); const a = el("div","acts");
+    a.append(el("span","pill edit", r.editedText ? "已改稿" : "待 Claude 修改"),
+      btn("再改","ghost",()=>{ editing=r.id; render(); }),
+      btn("改成 OK","ghost",()=>save(r.id,{status:"ok"})));
+    td.append(a); tr.append(td); return tr;
+  }, "目前沒有要修改的貼文");
+  fill("t-ok", ok, r=>{
+    const tr = el("tr"); tr.append(cellWhen(r), cellType(r), textCell(r,false));
+    const td = el("td"); const a = el("div","acts");
+    const on = r.source==="scheduled" || r.scheduled;
+    a.append(el("span","pill "+(on?"ok":"edit"), on ? "已上排程" : "等待上排程"),
+      btn("退回待審","ghost",()=>save(r.id,{status:"pending"})));
+    td.append(a); tr.append(td); return tr;
+  }, "還沒有 OK 的貼文");
+}
+
+render();
+(async ()=>{
+  const timer = setTimeout(()=>setStatus("連線較慢，請稍候或重新整理。"), 10000);
+  db = await claude.use("db");
+  if(!db){ clearTimeout(timer); setStatus("請先登入 claude.ai 才能讀取與儲存審稿結果。"); return; }
+  db.collection("posts").orderBy("due").onSnapshot(snap=>{
+    clearTimeout(timer);
+    rows = snap.docs.map(d=>Object.assign({id:d.id}, d.data()));
+    setStatus(rows.length ? "已同步，點選後會自動儲存。" : "貼文還沒載入，請稍候。");
+    render();
+  }, e=>{ clearTimeout(timer); setStatus("讀取失敗："+(e && e.message ? e.message : "請重新整理頁面")); });
+})();
+</script>
