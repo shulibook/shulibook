@@ -49,7 +49,9 @@
 .wk thead th.today b{color:var(--accent)}
 .wk tbody th{width:46px;font-size:12px;color:var(--muted);font-weight:500;padding-top:8px;font-variant-numeric:tabular-nums;text-align:left}
 .cell{height:104px;border-radius:8px;padding:6px 7px;display:flex;flex-direction:column;gap:2px;overflow:hidden;cursor:pointer;border:0;width:100%;text-align:left;font:inherit}
-.cell .k{font-size:11px;font-weight:700;display:flex;justify-content:space-between;gap:4px}
+.cell .k{font-size:11px;font-weight:700;display:flex;justify-content:space-between;gap:4px;white-space:nowrap;letter-spacing:-.02em}
+.cell .k span:first-child{overflow:hidden;text-overflow:clip}
+.cell .k span:last-child{flex:none}
 .cell .a{font-size:10px;opacity:.85}
 .cell .h{font-size:12px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;opacity:.95}
 .cell.empty{background:transparent;border:1.5px dashed var(--line);color:var(--muted);align-items:center;justify-content:center;font-size:12px;cursor:default}
